@@ -62,10 +62,11 @@ Here we also ensure that the response back from Zvolv is a successful one and th
 
 ### Management Endpoints
 
-- Actions() (`Auth0().action`)
-- AttackProtection() (`Auth0().attack_protection`)
-- Blacklists() ( `Auth0().blacklists` )
-- Branding() ( `Auth0().branding` )
+- Actions() (`Zvolv().action`)
+- AttackProtection() (`Zvolv().attack_protection`)
+- Blacklists() ( `Zvolv().blacklists` )
+- Branding() ( `Zvolv().branding` )
+
 
 ### Feedback
 
