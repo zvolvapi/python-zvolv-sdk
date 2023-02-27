@@ -1,44 +1,29 @@
-# Python Zvolv SDK
+![Auth0 SDK for Python](https://cdn.auth0.com/website/sdks/banners/auth0-python-banner.png)
 
-The Zvolv Hyper automation platform offers several APIs to build apps. Each Zvolv API delivers part of the capabilities from the platform, so that you can pick just those that fit for your needs. This SDK offers a corresponding package for each of Zvolv’s APIs. They are small and powerful when used independently, and work seamlessly when used together, too.
+![Release](https://img.shields.io/pypi/v/auth0-python)
+![Downloads](https://img.shields.io/pypi/dw/auth0-python)
+[![License](https://img.shields.io/:license-MIT-blue.svg?style=flat)](https://opensource.org/licenses/MIT)
+
+<div>
+📚 <a href="#documentation">Documentation</a> - 🚀 <a href="#getting-started">Getting started</a> - 💻 <a href="#api-reference">API reference</a> - 💬 <a href="#feedback">Feedback</a>
+</div>
 
 
-[![pypi package][pypi-image]][pypi-url]
-[![Build Status][build-image]][build-url]
-[![Python Version][python-version]][pypi-url]
+Learn how to automate with Zvolv using Python.
+## Documentation
+- [Docs site](https://www.zvolv.com/docs) - explore our docs site and learn more about Zvolv.
 
-Whether you're building a custom app for your team, or integrating a third party service into your Zvolv workflows, Zvolv Developer Kit for Python allows you to leverage the flexibility of Python to get your project up and running as quickly as possible.
-
-## Table of contents
-
-* [Requirements](#requirements)
-* [Installation](#installation)
-* [Getting started tutorial](#getting-started-tutorial)
-* [Support](#support)
-
-### Requirements
-
----
-
-This library requires Python 3.6 and above.
-
-> **Note:** You may need to use `python3` before your commands to ensure you use the correct Python path. e.g. `python3 --version`
-
-```bash
-python --version
-
--- or --
-
-python3 --version
-```
-
+## Getting started
 ### Installation
-
-We recommend using [PyPI][pypi] to install the Zvolv Developer Kit for Python.
-
-```bash
-$ pip install zvolv_sdk
+You can install the auth0 Python SDK using the following command.
 ```
+pip install zvolv_sdk
+```
+
+> Requires Python 3.7 or higher.
+
+### Usage
+The Zvolv Hyper automation platform offers several APIs to build apps. Each Zvolv API delivers part of the capabilities from the platform, so that you can pick just those that fit for your needs. This SDK offers a corresponding package for each of Zvolv’s APIs. They are small and powerful when used independently, and work seamlessly when used together, too.
 
 ### Getting started tutorial
 
@@ -69,7 +54,7 @@ except SlackApiError as e:
 
 Here we also ensure that the response back from Zvolv is a successful one and that the message is the one we sent by using the `assert` statement.
 
-### Support
+### Feedback
 
 ---
 
@@ -80,7 +65,7 @@ Visit the [Zvolv Community][zvolv-community] for getting help using Slack Develo
 
 <!-- Markdown links -->
 
-[pypi-image]: https://badge.fury.io/py/slack-sdk.svg
+
 [pypi-url]: https://pypi.org/project/slack-sdk/
 [python-version]: https://img.shields.io/pypi/pyversions/slack-sdk.svg
 [build-image]: https://github.com/slackapi/python-slack-sdk/workflows/CI%20Build/badge.svg
