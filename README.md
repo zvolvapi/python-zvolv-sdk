@@ -23,13 +23,7 @@ pip install zvolv_sdk
 > Requires Python 3.7 or higher.
 
 ### Usage
-The Zvolv Hyper automation platform offers several APIs to build apps. Each Zvolv API delivers part of the capabilities from the platform, so that you can pick just those that fit for your needs. This SDK offers a corresponding package for each of Zvolv’s APIs. They are small and powerful when used independently, and work seamlessly when used together, too.
-
-### Getting started tutorial
-
----
-
-Zvolv provide a Web API that gives you the ability to build applications that interact with Zvolv Hyper automation platform in a variety of ways. This Development Kit is a module based wrapper that makes interaction with that API easier. We have a basic example here with some of the more common uses but a full list of the available methods are available [here][api-methods]. More detailed examples can be found in [our guide](https://zvolvapi.github.io/python-zvolv-sdk/).
+The Zvolv Hyper automation platform offers several APIs to build apps. Each Zvolv API delivers part of the capabilities from the platform, so that you can pick just those that fit for your needs. This SDK offers a corresponding package for each of Zvolv’s APIs.
 
 #### Sending an email from Zvolv
 
@@ -53,6 +47,25 @@ except SlackApiError as e:
 ```
 
 Here we also ensure that the response back from Zvolv is a successful one and that the message is the one we sent by using the `assert` statement.
+
+### Authentication Endpoints
+
+- Database ( `authentication.Database` )
+- Delegated ( `authentication.Delegated` )
+- Enterprise ( `authentication.Enterprise` )
+- API Authorization - Get Token ( `authentication.GetToken`)
+- Passwordless ( `authentication.Passwordless` )
+- RevokeToken ( `authentication.RevokeToken` )
+- Social ( `authentication.Social` )
+- Users ( `authentication.Users` )
+
+
+### Management Endpoints
+
+- Actions() (`Auth0().action`)
+- AttackProtection() (`Auth0().attack_protection`)
+- Blacklists() ( `Auth0().blacklists` )
+- Branding() ( `Auth0().branding` )
 
 ### Feedback
 
