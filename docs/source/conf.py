@@ -30,7 +30,7 @@ def read(*names, **kwargs):
 # -- helper function to get the __version__ from a file
 # The full version, including alpha/beta/rc tags
 __version__ = None
-exec(open(f"../zvolv_sdk/version.py").read())
+exec(open(f"../../zvolv_sdk/version.py").read())
 
 # -- regenerate autodoc definitions
 # sphinx-apidoc -o ./source ../auth0/
