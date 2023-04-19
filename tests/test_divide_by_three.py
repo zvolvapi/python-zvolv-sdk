@@ -1,6 +1,6 @@
 import unittest
 
-from zvolv_sdk import divide_by_three
+from zvolv_sdk.divide_by_three import divide_by_three
 
 
 class TestDivideByThree(unittest.TestCase):
