@@ -28,18 +28,25 @@ def read(*names, **kwargs):
 
 
 # -- helper function to get the __version__ from a file
-# The full version, including alpha/beta/rc tags
-__version__ = None
-exec(open(f"../../zvolv_sdk/version.py").read())
+def find_version(*file_paths):
+    version_file = read(*file_paths)
+    version_match = re.search(r"^__version__ = ['\"]([^'\"]*)['\"]", version_file, re.M)
+    if version_match:
+        return version_match.group(1)
+    raise RuntimeError("Unable to find version string.")
+
 
 # -- regenerate autodoc definitions
 # sphinx-apidoc -o ./source ../auth0/
 
 # -- Project information -----------------------------------------------------
 
-project = "python-zvolv-sdk"
-copyright = "2021, Zvolv"
-author = "Akshay Jadhav"
+project = "Zvolv-python"
+copyright = "2023, Zvolv"
+author = "Zvolv"
+
+# The full version, including alpha/beta/rc tags
+release = find_version("..", "Zvolv", "__init__.py")
 
 
 # -- General configuration ---------------------------------------------------
@@ -52,6 +59,7 @@ extensions = [
     "sphinx.ext.viewcode",
     "sphinx.ext.githubpages",
     "sphinx_mdinclude",
+    "sphinx_autodoc_typehints",
 ]
 
 # Add any paths that contain templates here, relative to this directory.
@@ -86,3 +94,11 @@ html_theme = "sphinx_rtd_theme"
 # relative to this directory. They are copied after the builtin static files,
 # so a file named "default.css" will overwrite the builtin "default.css".
 html_static_path = []
+
+# Sphinx somehow can't find this one
+nitpick_ignore = [
+    ("py:class", "cryptography.hazmat.primitives.asymmetric.rsa.RSAPublicKey"),
+    ("py:class", "RSAPublicKey"),
+    ("py:data", "typing.Any"),
+    ("py:data", "typing.ClassVar"),
+]

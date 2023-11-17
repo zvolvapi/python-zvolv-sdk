@@ -1,31 +1,19 @@
-import os
-
-from setuptools import find_packages, setup
-
-here = os.path.abspath(os.path.dirname(__file__))
-
-# Find version
-__version__ = None
-exec(open(f"{here}/zvolv_sdk/version.py").read())
-
-long_description = ""
-with open(os.path.join(here, "README.md"), encoding="utf-8") as readme:
-    long_description = readme.read()
-
+from setuptools import setup, find_packages
+from os.path import dirname, join
 
 setup(
-    name = 'zvolv_sdk',
-    version=__version__,
-    packages=find_packages(),
+    name='zvolvArithmetic5',
+    version='0.1.0',
     license='MIT',
-    description = 'The Zvolv API Platform SDK for Python',
-    long_description=long_description,
+    description='Official Zvolv Arithmetic Python SDK',
     long_description_content_type="text/markdown",
-    author = 'Akshay Jadhav',
+    long_description= open(join('README.md'), encoding='utf-8').read(),  
+    packages=find_packages(),
+    author = 'Yogesh Jadhav',
     author_email = 'support@zvolv.com',
-    python_requires=">=3.6.0",
-    url = 'https://github.com/zvolvapi/python-zvolv-sdk',
-    download_url = 'https://github.com/zvolvapi/python-zvolv-sdk/archive/v_01.tar.gz',    # I explain this later on
+    python_requires=">=3.0.1",
+    url = '',
+    download_url = '',
     keywords = ['zvolv', 'zvolv-api', 'web-api', 'sdk', 'rest-api-client'],
     install_requires=[],
     classifiers=[
@@ -42,4 +30,7 @@ setup(
         "Programming Language :: Python :: 3.10",
         "Programming Language :: Python :: 3.11",
     ],
+     project_urls={
+        'Source': '',
+    },
 )
