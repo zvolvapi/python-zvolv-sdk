@@ -1,8 +1,8 @@
 name: Python package
-# on: [push]
-on:
-  release:
-    types: [published]
+on: [push]
+# on:
+#   release:
+#     types: [published]
 
 jobs:
   build:
@@ -28,18 +28,45 @@ jobs:
         run: |
           python3 -m coverage run -m pytest
 
-      - name : Generate Coverage Report
-        run: |
-          python3 -m coverage report -m
-
+  report-build-status:
+     runs-on: ubuntu-latest
+     needs: build
+     steps:
+       - name: Report Custom Build Status
+         run: |
+          if python3 -m coverage report -m; then
+            STATUS="success"
+          else
+            STATUS="failure"
+          fi
+          
+          if [ "$STATUS" == "success" ]; then
+            STATE="success"
+          else
+            STATE="failure"
+          fi
+     
+  deploy:
+    runs-on: ubuntu-latest
+    needs: build
+    steps:
       - name: Generating distribution archives
         run: |
           python setup.py sdist
           python setup.py bdist_wheel
 
-      - name: Publish to PyPI
-        env:
-          TWINE_USERNAME: __token__
-          TWINE_PASSWORD: ${{ secrets.PYPI_API_TOKEN }}
-        run: | 
-          python -m twine upload  --repository-url https://upload.pypi.org/legacy/ dist/*
+      # - name : Generate Coverage Report
+      #   run: |
+      #     python3 -m coverage report -m
+
+      # - name: Generating distribution archives
+      #   run: |
+      #     python setup.py sdist
+      #     python setup.py bdist_wheel
+
+      # - name: Publish to PyPI
+      #   env:
+      #     TWINE_USERNAME: __token__
+      #     TWINE_PASSWORD: ${{ secrets.PYPI_API_TOKEN }}
+      #   run: | 
+      #     python -m twine upload  --repository-url https://upload.pypi.org/legacy/ dist/*
