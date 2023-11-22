@@ -1,4 +1,7 @@
--e
 pyjwt
 pytest
 pytest-mock
+coverage
+wheel
+build
+twine
