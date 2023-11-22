@@ -1,8 +1,8 @@
 name: Python package
-# on: [push]
-on:
-  release:
-    types: [published]
+on: [push]
+# on:
+#   release:
+#     types: [published]
 
 jobs:
   build:
@@ -37,9 +37,9 @@ jobs:
           python setup.py sdist
           python setup.py bdist_wheel
 
-      - name: Publish to PyPI
-        env:
-          TWINE_USERNAME: __token__
-          TWINE_PASSWORD: ${{ secrets.PYPI_API_TOKEN }}
-        run: | 
-          python -m twine upload  --repository-url https://upload.pypi.org/legacy/ dist/*
+      # - name: Publish to PyPI
+      #   env:
+      #     TWINE_USERNAME: __token__
+      #     TWINE_PASSWORD: ${{ secrets.PYPI_API_TOKEN }}
+      #   run: | 
+      #     python -m twine upload  --repository-url https://upload.pypi.org/legacy/ dist/*
