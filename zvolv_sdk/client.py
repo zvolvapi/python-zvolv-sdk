@@ -6,8 +6,9 @@ import sys
 import time
 import requests
 from zvolv_sdk.server_configuration import EnvVariables
+from zvolv_sdk.common_api import CommonApi
 
-class Client():
+class Client(CommonApi):
 
     folder_path = "/tmp"            # For server
     # folder_path = os.getcwd()     # For local testing
@@ -20,14 +21,19 @@ class Client():
         zvolv_password: str = EnvVariables.get_zvolv_password(),
         zvolv_domain: str = EnvVariables.get_zvolv_domain(),
         zvolv_business_tag_id: str = "98NCMBD2KBZ4R",
-        zvolv_service_url: str = EnvVariables.get_zvolv_localhost_url()
+        zvolv_service_url: str = EnvVariables.get_zvolv_localhost_url(),
+        headers : str = "",
+        zvice_id : str = ""
         
     ) -> None:
+
         self.zvolv_user_id = zvolv_user_id
         self.zvolv_password = zvolv_password
         self.zvolv_domain = zvolv_domain
         self.zvolv_business_tag_id = zvolv_business_tag_id
         self.zvolv_service_url = zvolv_service_url
+        super().__init__(headers,zvice_id)
+
 
     
     def __repr__(self):
@@ -50,10 +56,10 @@ class Client():
     
 
     def login(self):
+        try:
             token_cache = self.load_token_cache()
             business_domain = self.zvolv_domain
             if token_cache and business_domain in token_cache and token_cache and (time.time() - token_cache[business_domain]["serverTime"]) < 60:
-                print("token cache")
                 return token_cache[business_domain]
 
             sha512pwd = hashlib.sha512(self.zvolv_password.encode('utf-8')).hexdigest()
@@ -67,9 +73,24 @@ class Client():
                     business_domain: {}
                 }
                 login_response = login_response.json()
-                for key, value in login_response.items():
-                    token_cache[business_domain][key] = value
-                self.save_token_cache(token_cache)
-                return login_response
+                if login_response.get("error"):
+                     return login_response
+                else:
+                    for key, value in login_response.items():
+                        token_cache[business_domain][key] = value
+                    self.save_token_cache(token_cache)
+                    return login_response
             else:
-                raise Exception()
+                raise Exception(f"Login failed with status code: {login_response.status_code}")
+        
+        except requests.exceptions.RequestException as req_exception:
+            print(f"Request Exception occurred during login: {req_exception}")
+
+        except ConnectionError as connection_error:
+            print(f"Connection Error occurred during login: {connection_error}")
+
+        except TimeoutError as timeout_error:
+            print(f"Timeout Error occurred during login: {timeout_error}")
+
+        except Exception as e:
+            print(f"An unexpected exception occurred during login: {e}")
