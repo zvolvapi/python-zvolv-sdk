@@ -1,8 +1,4 @@
-![Auth0 SDK for Python](https://cdn.auth0.com/website/sdks/banners/auth0-python-banner.png)
-
-![Release](https://img.shields.io/pypi/v/auth0-python)
-![Downloads](https://img.shields.io/pypi/dw/auth0-python)
-[![License](https://img.shields.io/:license-MIT-blue.svg?style=flat)](https://opensource.org/licenses/MIT)
+# ZvolvClient SDK
 
 <div>
 📚 <a href="#documentation">Documentation</a> - 🚀 <a href="#getting-started">Getting started</a> - 💻 <a href="#api-reference">API reference</a> - 💬 <a href="#feedback">Feedback</a>
@@ -11,17 +7,17 @@
 
 Learn how to automate with Zvolv using Python.
 ## Documentation
-- [Docs site](https://www.zvolv.com/docs) - explore our docs site and learn more about Zvolv.
+- [Docs site](https://python-zvolv-sdk.readthedocs.io/) - explore our docs site and learn more about Zvolv.
 - [User Guide](https://github.com/zvolvapi/python-zvolv-sdk/blob/main/UserGuide.md) - explore our user guide docs and learn more about sdk.
 
 ## Getting started
 ### Installation
-You can install the auth0 Python SDK using the following command.
+You can install the Zvolv Python SDK using the following command.
 ```
-pip install zvolv_sdk
+pip install zvolv-sdk
 ```
 
-> Requires Python 3.7 or higher.
+> Requires Python 3.0 or higher.
 
 ### Usage
 The Zvolv Hyper automation platform offers several APIs to build apps. Each Zvolv API delivers part of the capabilities from the platform, so that you can pick just those that fit for your needs. This SDK offers a corresponding package for each of Zvolv’s APIs.
@@ -49,7 +45,7 @@ except SlackApiError as e:
 
 Here we also ensure that the response back from Zvolv is a successful one and that the message is the one we sent by using the `assert` statement.
 
-### Authentication Endpoints
+### API References
 
 - Database ( `authentication.Database` )
 - Delegated ( `authentication.Delegated` )
@@ -60,13 +56,6 @@ Here we also ensure that the response back from Zvolv is a successful one and th
 - Social ( `authentication.Social` )
 - Users ( `authentication.Users` )
 
-
-### Management Endpoints
-
-- Actions() (`Zvolv().action`)
-- AttackProtection() (`Zvolv().attack_protection`)
-- Blacklists() ( `Zvolv().blacklists` )
-- Branding() ( `Zvolv().branding` )
 
 
 ### Feedback
