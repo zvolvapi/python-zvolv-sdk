@@ -19,43 +19,44 @@ pip install zvolv-sdk
 
 > Requires Python 3.0 or higher.
 
-### Usage
-The Zvolv Hyper automation platform offers several APIs to build apps. Each Zvolv API delivers part of the capabilities from the platform, so that you can pick just those that fit for your needs. This SDK offers a corresponding package for each of Zvolv’s APIs.
+# Usage
+## Initialize ZvolvClient
 
-#### Sending an email from Zvolv
+constructor(base_url: string)
 
-One of the most simple use-cases is sending an email from Zvolv. In our examples, we specify the channel name, however it is recommended to use the `channel_id` where possible. Also, if your app's bot user is not in a channel yet, invite the bot user before running the code snippet (or add `chat:write.public` to Bot Token Scopes for posting in any public channels).
+Initializes the ZvolvClient with the base url of the Zvolv server.
 
-```python
-import os
-from zvolv_sdk import WebClient
-from zvolv_sdk.errors import ZvolvApiError
+Once the package is installed, you can import the library using import or require approach:
 
-client = WebClient(token=os.environ['ZVOLV_BOT_TOKEN'])
+```bash
+from zvolv_sdk import ZvolvClient
 
-try:
-    response = client.chat_postMessage(channel='#random', text="Hello world!")
-    assert response["message"]["text"] == "Hello world!"
-except SlackApiError as e:
-    # You will get a ZvolvApiError if "ok" is False
-    assert e.response["ok"] is False
-    assert e.response["error"]  # str like 'invalid_auth', 'channel_not_found'
-    print(f"Got an error: {e.response['error']}")
+client = ZvolvClient('http://twig-me.com')
+
 ```
 
-Here we also ensure that the response back from Zvolv is a successful one and that the message is the one we sent by using the `assert` statement.
+## Initialize Workspace
 
-### API References
+methods for interacting with workspaces.
 
-- Database ( `authentication.Database` )
-- Delegated ( `authentication.Delegated` )
-- Enterprise ( `authentication.Enterprise` )
-- API Authorization - Get Token ( `authentication.GetToken`)
-- Passwordless ( `authentication.Passwordless` )
-- RevokeToken ( `authentication.RevokeToken` )
-- Social ( `authentication.Social` )
-- Users ( `authentication.Users` )
+```bash
 
+try:
+    workspace = client.workspace.init('kapilwf');
+except Error:
+    print(Error)
+
+```
+## Perform Authentication
+
+methods for authentication.
+
+```bash
+try:
+    login = client.auth.login('email', 'pass');
+except Error:
+    print(Error)
+```
 
 
 ### Feedback
