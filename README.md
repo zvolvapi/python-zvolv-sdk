@@ -62,7 +62,7 @@ methods for performing analytics-related operations.
 
 ```bash
 try:
-    analytics = client.analytics.search('65c470f6dab3102c930725ca', { query: { match_all: {} }, from: 0, size: 20, track_total_hits: True })
+    analytics = client.analytics.search('65c470f6dab3102c930725ca', { 'query': { 'match_all': {} }, 'from': 0, 'size': 20, 'track_total_hits': True)
 except Error:
     print(Error)
 
