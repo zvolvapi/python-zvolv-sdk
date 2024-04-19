@@ -6,6 +6,7 @@ class Auth:
         self.session = session
         self.base_url = base_url
         self.workspace_instance = workspace_instance
+        self.user_instance = None
 
     def login(self, email, password):
         """Authenticate a user and store their auth token."""
@@ -22,9 +23,10 @@ class Auth:
         if response.status_code == 200:
             resp = response.json()
             if resp.get('error') == False:
+                print("Login Success")
                 token = resp['loginToken']
                 self.session.headers.update({'Authorization': f"Bearer {token}"})
-                print(self.session.headers)
+                self.user_instance = resp
             else:
                 print("Login Failed")
                 print(response.json())
