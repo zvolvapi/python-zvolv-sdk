@@ -1,11 +1,10 @@
 import requests
-import hashlib
 
 class Workspace:
-    workspaceInstance = None
     def __init__(self, session, base_url):
         self.session = session
         self.base_url = base_url
+        self.workspace_instance = None
     
     def init(self, domain):
         """Set the domain for the workspace."""
@@ -16,7 +15,7 @@ class Workspace:
         if response.status_code == 200:
             resp = response.json()
             if resp.get('error') == False:
-                self.workspaceInstance = resp['data']
+                self.workspace_instance = resp['data']
                 print("Init Success")
                 print(response.json())
             else:
