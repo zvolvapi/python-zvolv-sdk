@@ -27,7 +27,9 @@ setup(
     url = 'https://github.com/zvolvapi/python-zvolv-sdk',
     download_url = 'https://github.com/zvolvapi/python-zvolv-sdk/archive/v_01.tar.gz',    # I explain this later on
     keywords = ['zvolv', 'zvolv-api', 'web-api', 'sdk', 'rest-api-client'],
-    install_requires=[],
+    install_requires=[
+        'requests>=2.23.0'
+    ],
     classifiers=[
         'Development Status :: 3 - Alpha',
         'Intended Audience :: Developers',
