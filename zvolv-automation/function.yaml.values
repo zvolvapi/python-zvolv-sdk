@@ -1,0 +1,41 @@
+MaxWorkers:
+  displayName: Number of workers
+  kind: number
+  description: "Number of requests to handle concurrently"
+  required: true
+  attributes:
+    defaultValue: 4
+    minValue: 1
+    maxValue: 10000
+
+Host:
+  displayName: Zvolv Host URL
+  kind: string
+  description: "Zvolv Host on which this automation will execute"
+  required: true
+  attributes:
+    defaultValue: zvolv.com
+
+Workspace:
+  displayName: Zvolv Workspace
+  kind: string
+  description: "Zvolv Workspace Identifier (domain)"
+  required: true
+  attributes:
+    defaultValue: app
+
+Username:
+  displayName: Zvolv Username 
+  kind: string
+  description: "Zvolv admin username or email"
+  required: true
+  attributes:
+    defaultValue: admin@zvolv.com
+
+Password:
+  displayName: Zvolv Password 
+  kind: string
+  description: "Zvolv admin password"
+  required: true
+  attributes:
+    defaultValue: *****
