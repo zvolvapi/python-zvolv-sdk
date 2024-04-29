@@ -6,6 +6,15 @@ spec:
     commands:
       - 'pip install zvolv-sdk'
   description: "Zvolv's Automations, a high-performance serverless framework. This setup enables Zvolv to execute custom, event-driven functions efficiently with minimal latency. A robust platform for developing and deploying various business automations, which can process data in real-time and scale seamlessly on-demand"
+  env:
+    - name: HOST
+      value: {{ .Host }}
+    - name: WORKSPACE
+      value: {{ .Workspace }}
+    - name: USERNAME
+      value: {{ .Username }}
+    - name: PASSWORD
+      value: {{ .Password }}
   handler: "main:handler"
   runtime: "python:3.9"
   minReplicas: 1
