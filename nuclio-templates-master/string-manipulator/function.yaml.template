@@ -1,5 +1,5 @@
 metadata:
-  name: zvolv-automation
+  name: string-manipulator
 spec:
   build:
     functionSourceCode: {{ .SourceCode }}
