@@ -4,6 +4,7 @@ from .modules.workspace import Workspace
 from .modules.auth import Auth
 from .modules.analytics import Analytics
 from .modules.forms import Forms
+from .modules.submissions import Submissions
 
 class ZvolvClient:
     def __init__(self, base_url):
@@ -13,6 +14,7 @@ class ZvolvClient:
         self._auth_module = None
         self._analytics_module = None
         self._forms_module = None
+        self._submissions_module = None
 
     @property
     def workspace(self):
@@ -45,6 +47,15 @@ class ZvolvClient:
         if not self._forms_module:
             self._forms_module = Forms(self.session, self.base_url)
         return self._forms_module
+    
+    @property
+    def submissions(self):
+        
+        self.validate()
+
+        if not self._submissions_module:
+            self._submissions_module = Submissions(self.session, self.base_url)
+        return self._submissions_module
 
     
     # Validate if workspace and user are initialized
