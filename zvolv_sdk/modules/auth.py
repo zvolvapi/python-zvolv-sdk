@@ -23,7 +23,6 @@ class Auth:
         if response.status_code == 200:
             resp = response.json()
             if resp.get('error') == False:
-                print("Login Success")
                 token = resp['loginToken']
                 self.session.headers.update({'Authorization': f"Bearer {token}"})
                 self.user_instance = resp

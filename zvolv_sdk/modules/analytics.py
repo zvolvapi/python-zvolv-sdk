@@ -15,7 +15,7 @@ class Analytics:
                 print("search Success")
                 return resp['data']
             else:
-                print("Init Failed")
+                print("search Failed")
                 print(response.json())
 
         return response.json()

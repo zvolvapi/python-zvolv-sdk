@@ -16,8 +16,6 @@ class Workspace:
             resp = response.json()
             if resp.get('error') == False:
                 self.workspace_instance = resp['data']
-                print("Init Success")
-                print(response.json())
             else:
                 print("Init Failed")
                 print(response.json())
