@@ -29,6 +29,8 @@ setup(
     keywords = ['zvolv', 'zvolv-api', 'web-api', 'sdk', 'rest-api-client'],
     install_requires=[
         'requests>=2.23.0'
+        'pydantic>=2.7.3',
+        'elasticsearch_dsl>=8.13.1',
     ],
     classifiers=[
         'Development Status :: 3 - Alpha',
