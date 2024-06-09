@@ -131,6 +131,46 @@ response = client.submissions.search(FORM_ID, search_obj)
 > search method support elastic queries. Generate your query with help of elasticsearch_dsl
 
 
+### Tasks
+#### Create a Task
+```python
+from zvolv_sdk.models.task import Task
+
+task = Task(...)
+response = client.tasks.post(task)
+```
+> Use Task model with required attributes
+
+#### Update a Task
+```python
+from zvolv_sdk.models.task import Task
+
+task = Task(...)
+response = client.tasks.put(task)
+```
+> Use Task model with id & required attributes to be updated
+
+#### Get a Task
+```python
+from zvolv_sdk.models.task import Task
+
+response: Task = client.tasks.get(ID)
+```
+> ID is unique task identifier
+
+#### Search Tasks
+```python
+from elasticsearch_dsl import Q, Search
+
+search_obj = Search()
+bool_query = Q('bool', must=[Q(...)])
+search_obj = search_obj.query(bool_query)
+
+response = client.tasks.search(search_obj)
+```
+> search method support elastic queries. Generate your query with help of elasticsearch_dsl
+
+
 ### Feedback
 
 ---
