@@ -22,51 +22,74 @@ pip install zvolv-sdk
 # Usage
 ## Initialize ZvolvClient
 
-constructor(base_url: string)
+Once the package is installed, you can import the library using import or require approach.
 
-Initializes the ZvolvClient with the base url of the Zvolv server.
-
-Once the package is installed, you can import the library using import or require approach:
+Initializes the ZvolvClient with the base url of the Zvolv server:
 
 ```bash
 from zvolv_sdk import ZvolvClient
 
-client = ZvolvClient('http://twig-me.com')
+client = ZvolvClient(BASE_URL)
 
 ```
+> BASE_URL is the host address on which you Zvolv workspace is deployed, unless you have isolated custom deployment use 'https://app.zvolv.com'.
 
 ## Initialize Workspace
 
-methods for interacting with workspaces.
+Before performing any operation, SDK needs your workspace context. Use below method to initialize your workspace
 
 ```bash
 
 try:
-    workspace = client.workspace.init('kapilwf')
+    workspace = client.workspace.init(DOMAIN)
 except Error:
     print(Error)
 
 ```
+> DOMAIN is your unique workspace identifier
+
 ## Perform Authentication
 
-methods for authentication.
+Zvolv modules are access contolled, you need valid user crendentials to invoke any module methods. Use below method for authentication.
 
 ```bash
 try:
-    login = client.auth.login('email', 'pass')
+    login = client.auth.login(EMAIL, PASSWORD)
 except Error:
     print(Error)
 ```
-## Perform Analytics Search
-methods for performing analytics-related operations.
+> You can use any valid zvolv user's EMAIL & PASSWORD from your workspace for authentication 
 
+## API references
+Zvolv comprises of various modules to achieve respective business operations. Use below modules & methods to interact with Zvolv APIs.
+
+### Forms
+Create a Form
 ```bash
-try:
-    analytics = client.analytics.search('65c470f6dab3102c930725ca', { 'query': { 'match_all': {} }, 'from': 0, 'size': 20, 'track_total_hits': True)
-except Error:
-    print(Error)
+from zvolv_sdk.models.form import Form
 
+form = Form(...)
+response = client.forms.post(form)
 ```
+> Use Form model with required attributes
+
+Update a Form
+```bash
+from zvolv_sdk.models.form import Form
+
+form = Form(...)
+response = client.forms.put(form)
+```
+> Use Form model with id or uuid & other required attributes
+
+Get a Form
+```bash
+from zvolv_sdk.models.form import Form
+
+response: Form = client.forms.get(id)
+```
+> Get Form using id
+
 
 ### Feedback
 
