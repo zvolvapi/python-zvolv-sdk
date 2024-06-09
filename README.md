@@ -32,7 +32,7 @@ from zvolv_sdk import ZvolvClient
 client = ZvolvClient(BASE_URL)
 
 ```
-> BASE_URL is the host address on which you Zvolv workspace is deployed, unless you have isolated custom deployment use 'https://app.zvolv.com'.
+> BASE_URL is the host address on which your Zvolv workspace is deployed, unless you have isolated custom deployment use 'https://app.zvolv.com'.
 
 ## Initialize Workspace
 
@@ -58,13 +58,13 @@ try:
 except Error:
     print(Error)
 ```
-> You can use any valid zvolv user's EMAIL & PASSWORD from your workspace for authentication 
+> You can use any valid zvolv user's EMAIL & PASSWORD from your workspace
 
 ## API references
 Zvolv comprises of various modules to achieve respective business operations. Use below modules & methods to interact with Zvolv APIs.
 
 ### Forms
-Create a Form
+#### Create a Form
 ```bash
 from zvolv_sdk.models.form import Form
 
@@ -73,7 +73,7 @@ response = client.forms.post(form)
 ```
 > Use Form model with required attributes
 
-Update a Form
+#### Update a Form
 ```bash
 from zvolv_sdk.models.form import Form
 
@@ -82,13 +82,13 @@ response = client.forms.put(form)
 ```
 > Use Form model with id or uuid & other required attributes
 
-Get a Form
+#### Get a Form
 ```bash
 from zvolv_sdk.models.form import Form
 
-response: Form = client.forms.get(id)
+response: Form = client.forms.get(ID)
 ```
-> Get Form using id
+> ID is unique form identifier
 
 
 ### Feedback
