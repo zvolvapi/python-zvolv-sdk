@@ -26,7 +26,7 @@ Once the package is installed, you can import the library using import or requir
 
 Initializes the ZvolvClient with the base url of the Zvolv server:
 
-```bash
+```python
 from zvolv_sdk import ZvolvClient
 
 client = ZvolvClient(BASE_URL)
@@ -38,7 +38,7 @@ client = ZvolvClient(BASE_URL)
 
 Before performing any operation, SDK needs your workspace context. Use below method to initialize your workspace
 
-```bash
+```python
 
 try:
     workspace = client.workspace.init(DOMAIN)
@@ -52,7 +52,7 @@ except Error:
 
 Zvolv modules are access contolled, you need valid user crendentials to invoke any module methods. Use below method for authentication.
 
-```bash
+```python
 try:
     login = client.auth.login(EMAIL, PASSWORD)
 except Error:
@@ -65,7 +65,7 @@ Zvolv comprises of various modules to achieve respective business operations. Us
 
 ### Forms
 #### Create a Form
-```bash
+```python
 from zvolv_sdk.models.form import Form
 
 form = Form(...)
@@ -74,7 +74,7 @@ response = client.forms.post(form)
 > Use Form model with required attributes
 
 #### Update a Form
-```bash
+```python
 from zvolv_sdk.models.form import Form
 
 form = Form(...)
@@ -83,7 +83,7 @@ response = client.forms.put(form)
 > Use Form model with id or uuid & other required attributes
 
 #### Get a Form
-```bash
+```python
 from zvolv_sdk.models.form import Form
 
 response: Form = client.forms.get(ID)
@@ -93,7 +93,7 @@ response: Form = client.forms.get(ID)
 
 ### Submissions
 #### Create a Submission
-```bash
+```python
 from zvolv_sdk.models.submission import Submission
 
 submission = Submission(...)
@@ -102,7 +102,7 @@ response = client.submissions.post(submission)
 > Use Submission model with elements to be created
 
 #### Update a Submission
-```bash
+```python
 from zvolv_sdk.models.submission import Submission
 
 submission = Submission(...)
@@ -111,13 +111,24 @@ response = client.submissions.put(submission)
 > Use Submission model with id & elements to be updated
 
 #### Get a Submission
-```bash
+```python
 from zvolv_sdk.models.submission import Submission
 
 response: Submission = client.submissions.get(ID)
 ```
 > ID is unique submission identifier
 
+#### Search Submissions
+```python
+from elasticsearch_dsl import Q, Search
+
+search_obj = Search()
+bool_query = Q('bool', must=[Q(...)])
+search_obj = search_obj.query(bool_query)
+
+response = client.submissions.search(FORM_ID, search_obj)
+```
+> search method support elastic queries. Generate your query with help of elasticsearch_dsl
 
 
 ### Feedback
