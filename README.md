@@ -91,6 +91,35 @@ response: Form = client.forms.get(ID)
 > ID is unique form identifier
 
 
+### Submissions
+#### Create a Submission
+```bash
+from zvolv_sdk.models.submission import Submission
+
+submission = Submission(...)
+response = client.submissions.post(submission)
+```
+> Use Submission model with elements to be created
+
+#### Update a Submission
+```bash
+from zvolv_sdk.models.submission import Submission
+
+submission = Submission(...)
+response = client.submissions.put(submission)
+```
+> Use Submission model with id & elements to be updated
+
+#### Get a Submission
+```bash
+from zvolv_sdk.models.submission import Submission
+
+response: Submission = client.submissions.get(ID)
+```
+> ID is unique submission identifier
+
+
+
 ### Feedback
 
 ---
@@ -98,7 +127,7 @@ response: Form = client.forms.get(ID)
 If you get stuck, we’re here to help. The following are the best ways to get assistance working through your issue:
 
 Use our [Github Issue Tracker][gh-issues] for reporting bugs or requesting features.
-Visit the [Zvolv Community][zvolv-community] for getting help using Slack Developer Kit for Python or just generally bond with your fellow Zvolv developers.
+Visit the [Zvolv Community][zvolv-community] for getting help using Zvolv Developer Kit for Python or just generally bond with your fellow Zvolv developers.
 
 <!-- Markdown links -->
 
