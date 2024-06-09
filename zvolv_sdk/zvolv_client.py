@@ -8,6 +8,10 @@ from .modules.submissions import Submissions
 
 class ZvolvClient:
     def __init__(self, base_url):
+
+        if not base_url:
+            raise ValueError("Base URL is required to initialize the client")
+
         self.base_url = base_url
         self.session = requests.Session()
         self._workspace_module = None
