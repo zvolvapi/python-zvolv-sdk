@@ -10,6 +10,9 @@ class Auth:
 
     def login(self, email, password):
         """Authenticate a user and store their auth token."""
+        if not email or not password:
+            raise ValueError("Email and Password are required to login")
+        
         url = f"{self.base_url}/rest/v17/user/login"
         headers = {
             'Content-Type': 'application/json',

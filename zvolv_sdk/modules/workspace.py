@@ -8,6 +8,8 @@ class Workspace:
     
     def init(self, domain):
         """Set the domain for the workspace."""
+        if not domain:
+            raise ValueError("Domain is required to initialize the workspace")
         self.session.headers.update({'domain': domain})
         """Fetch workspace details from domain."""
         url = f"{self.base_url}/rest/v17/organisation/web/config/{domain}"
