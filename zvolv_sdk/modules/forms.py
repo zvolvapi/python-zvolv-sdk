@@ -1,7 +1,6 @@
 import requests
 
 from ..models.form import Form
-from ..utility.decorators import enforce_pydantic_model
 
 class Forms:
     def __init__(self, session, base_url):
@@ -23,9 +22,11 @@ class Forms:
 
         return response.json()
     
-    @enforce_pydantic_model(Form)
     def put(self, form: Form, enableRetrofit: bool = False, enableReSync: bool = False):
         """Update existing form"""
+        # form should be a valid Form model
+        if not isinstance(form, Form):
+            raise ValueError("form field should be an instance of Form model")
         # id or uuid field is required in the form model to update the form
         if not form.id and not form.uuid:
             raise ValueError("id or uuid field is required to update the form")
@@ -41,9 +42,10 @@ class Forms:
 
         return response.json()
     
-    @enforce_pydantic_model(Form)
     def post(self, form: Form):
         """Create a new form"""
+        if not isinstance(form, Form):
+            raise ValueError("form field should be an instance of Form model")
         url = f"{self.base_url}/api/v1/forms"
         response = self.session.post(url, json=form.model_dump())
         if response.status_code == 200:

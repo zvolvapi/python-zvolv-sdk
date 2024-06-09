@@ -1,6 +1,6 @@
 import requests
 
-from ..utility.decorators import enforce_pydantic_model
+from elasticsearch_dsl import Search as ESearch
 from ..models.submission import Submission
 
 class Submissions:
@@ -23,9 +23,34 @@ class Submissions:
 
         return response.json()
     
-    @enforce_pydantic_model(Submission)
+    def search(self, formId: str, searchObj: ESearch):
+        """Search submissions"""
+
+        # Accept only elasticsearch-dsl Search object as searchObj
+        if not isinstance(searchObj, ESearch):
+            raise ValueError("searchObj field should be an instance of elasticsearch-dsl Search object")
+        
+        if not formId:
+            raise ValueError("formId field is required to search the submissions")
+
+        query = searchObj.to_dict()
+        url = f"{self.base_url}/api/v1/analytics/search"
+        response = self.session.post(url, json={'formId': formId, 'query': query})
+        if response.status_code == 200:
+            resp = response.json()
+            if resp.get('error') == False and resp['data']['elements']:
+                return resp['data']
+            else:
+                print("Form search Failed")
+                print(response.json())
+
+        return response.json()
+    
     def put(self, submission: Submission, skipValidation: bool = False, skipAutomation: bool = True, skipFormulaValidation: bool = False):
         """Update existing submission"""
+        if not isinstance(submission, Submission):
+            raise ValueError("submission field should be an instance of Submission model")
+
         if not submission.id:
             raise ValueError("id field is required to update the submission")
         
@@ -44,9 +69,11 @@ class Submissions:
 
         return response.json()
     
-    @enforce_pydantic_model(Submission)
     def post(self, submission: Submission, skipValidation: bool = False, skipAutomation: bool = True, skipFormulaValidation: bool = False):
         """Create a new submission"""
+        if not isinstance(submission, Submission):
+            raise ValueError("submission field should be an instance of Submission model")
+
         if not submission.formId:
             raise ValueError("formId field is required to create the submission")
         
