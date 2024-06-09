@@ -58,7 +58,7 @@ class Submissions:
             raise ValueError("elements field with atleast 1 element is required to update the submission")
         
         url = f"{self.base_url}/api/v1/submissions/{submission.id}?skipValidation={skipValidation}&skipAutomation={skipAutomation}&skipFormulaValidation={skipFormulaValidation}"
-        response = self.session.put(url, json=submission.model_dump())
+        response = self.session.put(url, json=submission.model_dump(exclude_none=True, exclude_unset=True))
         if response.status_code == 200:
             resp = response.json()
             if resp.get('error') == False:
@@ -81,7 +81,7 @@ class Submissions:
             raise ValueError("elements field is required to create the submission")
         
         url = f"{self.base_url}/api/v1/submissions?skipValidation={skipValidation}&skipAutomation={skipAutomation}&skipFormulaValidation={skipFormulaValidation}"
-        response = self.session.post(url, json=submission.model_dump())
+        response = self.session.post(url, json=submission.model_dump(exclude_none=True, exclude_unset=True))
         if response.status_code == 200:
             resp = response.json()
             if resp.get('error') == False:

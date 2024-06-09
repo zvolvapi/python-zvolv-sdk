@@ -5,6 +5,7 @@ from .modules.auth import Auth
 from .modules.analytics import Analytics
 from .modules.forms import Forms
 from .modules.submissions import Submissions
+from .modules.tasks import Tasks
 
 class ZvolvClient:
     def __init__(self, base_url):
@@ -19,6 +20,7 @@ class ZvolvClient:
         self._analytics_module = None
         self._forms_module = None
         self._submissions_module = None
+        self._tasks_module = None
 
     @property
     def workspace(self):
@@ -60,6 +62,15 @@ class ZvolvClient:
         if not self._submissions_module:
             self._submissions_module = Submissions(self.session, self.base_url)
         return self._submissions_module
+    
+    @property
+    def tasks(self):
+        
+        self.validate()
+
+        if not self._tasks_module:
+            self._tasks_module = Tasks(self.session, self.base_url)
+        return self._tasks_module
 
     
     # Validate if workspace and user are initialized
@@ -70,4 +81,4 @@ class ZvolvClient:
 
         # Check if user is logged in
         if self.auth.user_instance is None:
-            raise Exception('User not logged in! Please use auth.login() before calling analytics methods')
+            raise Exception('User not logged in! Please use auth.login() before calling *module methods')

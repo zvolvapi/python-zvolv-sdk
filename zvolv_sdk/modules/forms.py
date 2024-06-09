@@ -31,7 +31,7 @@ class Forms:
         if not form.id and not form.uuid:
             raise ValueError("id or uuid field is required to update the form")
         url = f"{self.base_url}/api/v1/forms?enableRetrofit={enableRetrofit}&enableReSync={enableReSync}"
-        response = self.session.put(url, json=form.model_dump())
+        response = self.session.put(url, json=form.model_dump(exclude_none=True, exclude_unset=True))
         if response.status_code == 200:
             resp = response.json()
             if resp.get('error') == False:
@@ -47,7 +47,7 @@ class Forms:
         if not isinstance(form, Form):
             raise ValueError("form field should be an instance of Form model")
         url = f"{self.base_url}/api/v1/forms"
-        response = self.session.post(url, json=form.model_dump())
+        response = self.session.post(url, json=form.model_dump(exclude_none=True, exclude_unset=True))
         if response.status_code == 200:
             resp = response.json()
             if resp.get('error') == False:
