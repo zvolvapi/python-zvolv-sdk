@@ -8,7 +8,7 @@
 Learn how to automate with Zvolv using Python.
 ## Documentation
 - [Docs site](https://python-zvolv-sdk.readthedocs.io/) - explore our docs site and learn more about Zvolv.
-- [User Guide](https://github.com/zvolvapi/python-zvolv-sdk/blob/main/UserGuide.md) - explore our user guide docs and learn more about sdk.
+- [Examples](https://github.com/zvolvapi/python-zvolv-sdk/blob/main/EXAMPLES.md) - explore our examples docs and learn more about using sdk.
 
 ## Getting started
 ### Installation
