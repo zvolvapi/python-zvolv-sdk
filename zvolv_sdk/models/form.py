@@ -2,9 +2,10 @@ from pydantic import BaseModel
 from typing import List, Optional, Union
 
 class Element(BaseModel):
-    elementId: str
-    label: str
-    type: str
+    id: Optional[int] = None
+    elementId: Optional[str] = None
+    label: Optional[str] = None
+    type: Optional[str] = None
     defaultValue: Optional[Union[str, bool, int, dict, list]] = None
     required: Optional[bool] = False
     disabled: Optional[bool] = False
@@ -15,11 +16,10 @@ class Element(BaseModel):
     attributes: Optional[dict] = {}
     dependencies: Optional[List] = []
     validations: Optional[List] = []
-    dataType: str
+    dataType: Optional[str] = None
     rbacConf: Optional[dict] = {}
     abacConf: Optional[dict] = {}
     showLabel: Optional[bool] = True
-    id: str
 
 class Form(BaseModel):
     id: Optional[str] = None
