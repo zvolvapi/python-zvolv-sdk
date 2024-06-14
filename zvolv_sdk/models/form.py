@@ -2,7 +2,7 @@ from pydantic import BaseModel
 from typing import List, Optional, Union
 
 class Element(BaseModel):
-    id: Optional[int] = None
+    id: Optional[str] = None
     elementId: Optional[str] = None
     label: Optional[str] = None
     type: Optional[str] = None
