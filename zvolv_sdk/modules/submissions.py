@@ -2,26 +2,56 @@ import requests
 
 from elasticsearch_dsl import Search as ESearch
 from ..models.submission import Submission
+# from ..modules.logger import Logger
 
 class Submissions:
-    def __init__(self, session, base_url):
+    def __init__(self, session, base_url, logger):
         self.session = session
         self.base_url = base_url
+        self.logger = logger
         self.workspace_instance = None
     
     def get(self, id):
-        """Get form details from id"""
-        url = f"{self.base_url}/api/v1/submissions/{id}"
-        response = self.session.get(url)
-        if response.status_code == 200:
+        """
+        Get form submission details from id
+
+        :param id: FormSubmissionID/id of entry
+        :return:
+        """
+        try:
+            url = f"{self.base_url}/api/v1/submissions/{id}"
+            response = self.session.get(url)
+            print(response.text)
+
+            response.raise_for_status()  # Raise an exception for HTTP errors
             resp = response.json()
             if resp.get('error') == False and resp['data']['elements']:
+                self.logger.info(f"Form details retrieved successfully for id {id}")
                 return Submission(**resp['data']['elements'][0])
             else:
-                print("Form get Failed")
-                print(response.json())
+                self.logger.error(f"Form get failed for id {id} -- {response.text}")
+        except requests.exceptions.RequestException as e:
+            self.logger.error(f"Request failed for id {id}: {e}")
+        except Exception as e:
+            self.logger.error(f"An unexpected error occurred for id {id}: {e}")
+            # TODO raise exception and stacktrace
 
-        return response.json()
+        return None
+
+    # # OLDER
+    # def get(self, id):
+    #     """Get form details from id"""
+    #     url = f"{self.base_url}/api/v1/submissions/{id}"
+    #     response = self.session.get(url)
+    #     if response.status_code == 200:
+    #         resp = response.json()
+    #         if resp.get('error') == False and resp['data']['elements']:
+    #             return Submission(**resp['data']['elements'][0])
+    #         else:
+    #             print("Form get Failed")
+    #             print(response.json())
+    #
+    #     return response.json()
     
     def search(self, formId: str, searchObj: ESearch):
         """Search submissions"""
