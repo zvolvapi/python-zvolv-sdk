@@ -1,8 +1,9 @@
+import traceback
 import requests
-
 from elasticsearch_dsl import Search as ESearch
 from ..models.submission import Submission
 # from ..modules.logger import Logger
+from ..utility.exceptionHandler import ExceptionHandler
 
 class Submissions:
     def __init__(self, session, base_url, logger):
@@ -21,20 +22,26 @@ class Submissions:
         try:
             url = f"{self.base_url}/api/v1/submissions/{id}"
             response = self.session.get(url)
-            print(response.text)
-
             response.raise_for_status()  # Raise an exception for HTTP errors
             resp = response.json()
             if resp.get('error') == False and resp['data']['elements']:
                 self.logger.info(f"Form details retrieved successfully for id {id}")
                 return Submission(**resp['data']['elements'][0])
             else:
-                self.logger.error(f"Form get failed for id {id} -- {response.text}")
+                error_msg = f"Form get failed for id {id} -- {response.text}"
+                self.logger.error(error_msg)
+                raise error_msg
         except requests.exceptions.RequestException as e:
-            self.logger.error(f"Request failed for id {id}: {e}")
+            error_msg = f"Request failed for id {id}: {response.text}"
+            ExceptionHandler.handle_request_exception(e, error_msg)
+            # self.logger.error(error_msg)
+            # raise requests.exceptions.RequestException(error_msg)
         except Exception as e:
-            self.logger.error(f"An unexpected error occurred for id {id}: {e}")
-            # TODO raise exception and stacktrace
+            error_msg = f"An unexpected error occurred for id {id}: {e}"
+            ExceptionHandler.handle_generic_exception(error_msg)
+            # self.logger.error(error_msg)
+            # raise error_msg
+
 
         return None
 

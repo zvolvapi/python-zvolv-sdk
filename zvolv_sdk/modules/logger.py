@@ -30,10 +30,10 @@ class Logger:
             console_handler.setFormatter(formatter)
             # Add the handler to the logger
             self.logger.addHandler(console_handler)
-            self.logger.setLevel(logging.INFO)
-
-            # log_level = getattr(logging, setLogLevel.upper(), logging.INFO)
-            # self.logger.setLevel(log_level)
+            # Set log level
+            log_level = getattr(logging, setLogLevel.upper(), logging.INFO)
+            self.logger.setLevel(log_level)
+            # self.logger.setLevel(logging.ERROR)
         else:
             pass
 
@@ -46,7 +46,6 @@ class Logger:
         :param message: Message to log
         :return: None
         """
-        print("eeeee")
         if not self.logger:
             self.logger = Logger()
             self.logger.init()
@@ -58,7 +57,6 @@ class Logger:
         :return: None
         """
         if not self.logger:
-            print("eeeeeee")
             self.logger = Logger()
             self.logger.init()
         self.logger.error(message)
