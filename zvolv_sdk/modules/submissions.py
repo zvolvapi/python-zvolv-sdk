@@ -29,8 +29,9 @@ class Submissions:
                 return Submission(**resp['data']['elements'][0])
             else:
                 error_msg = f"Form get failed for id {id} -- {response.text}"
-                self.logger.error(error_msg)
-                raise error_msg
+                ExceptionHandler.handle_generic_exception(error_msg)
+                # self.logger.error(error_msg)
+                # raise error_msg
         except requests.exceptions.RequestException as e:
             error_msg = f"Request failed for id {id}: {response.text}"
             ExceptionHandler.handle_request_exception(e, error_msg)
@@ -41,8 +42,6 @@ class Submissions:
             ExceptionHandler.handle_generic_exception(error_msg)
             # self.logger.error(error_msg)
             # raise error_msg
-
-
         return None
 
     # # OLDER
