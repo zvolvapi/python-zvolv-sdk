@@ -16,18 +16,19 @@ class ZvolvClient:
 
         self.base_url = base_url
         self.session = requests.Session()
+        self.logger =  Logger()
         self._workspace_module = None
         self._auth_module = None
         self._analytics_module = None
         self._forms_module = None
         self._submissions_module = None
         self._tasks_module = None
-        self._logger_module = None
+       
 
     @property
     def workspace(self):
         if not self._workspace_module:
-            self._workspace_module = Workspace(self.session, self.base_url)
+            self._workspace_module = Workspace(self.session, self.logger, self.base_url)
         return self._workspace_module
     
     @property
@@ -73,16 +74,6 @@ class ZvolvClient:
         if not self._tasks_module:
             self._tasks_module = Tasks(self.session, self.base_url)
         return self._tasks_module
-
-    @property
-    def logger(self):
-
-        self.validate()
-
-        if not self._logger_module:
-            self._logger_module = Logger(self.session, self.base_url)
-        return self._logger_module
-
     
     # Validate if workspace and user are initialized
     def validate(self):
