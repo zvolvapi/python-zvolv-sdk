@@ -1,4 +1,5 @@
 import logging
+from ..utility.kafka_handler import KafkaHandler
 
 class Logger:
     def __init__(self, logLevel="INFO"):
@@ -6,12 +7,17 @@ class Logger:
         log_level = getattr(logging, logLevel.upper(), logging.INFO)
         self.logger.setLevel(log_level)
         formatter = logging.Formatter('%(asctime)s - %(levelname)s - %(message)s', datefmt='%m/%d/%Y %I:%M:%S %p')
-        # Create a handler to log messages to the console
+
+        # Create & add handler to log messages to the console
         console_handler = logging.StreamHandler()
-        # Add the formatter to the handler
         console_handler.setFormatter(formatter)
-        # Add the handler to the logger
         self.logger.addHandler(console_handler)
+
+    def addHandler(self, producer, domain, automation_uuid):
+        # Create & add handler to log messages to kafka topic
+        topic = 'zeno.automations.log'
+        kafka_handler = KafkaHandler(producer, topic, domain, automation_uuid)
+        self.logger.addHandler(kafka_handler)
 
     def info(self, message):
         """
@@ -25,7 +31,7 @@ class Logger:
         :param message: Message to log
         :return: None
         """
-        self.logger.error(message)
+        self.logger.error(message, exc_info=True)
 
     def debug(self, message):
         """
