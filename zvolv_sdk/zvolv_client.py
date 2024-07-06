@@ -36,7 +36,7 @@ class ZvolvClient:
         if not self._workspace_module or not self._workspace_module.workspace_instance:
             raise Exception('Workspace not initialized! Please use workspace.init() before calling auth methods')
         if not self._auth_module:
-            self._auth_module = Auth(self.session, self.base_url, self._workspace_module.workspace_instance)
+            self._auth_module = Auth(self.session, self.logger, self.base_url, self._workspace_module.workspace_instance)
         return self._auth_module
     
     @property
