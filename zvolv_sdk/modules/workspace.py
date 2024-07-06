@@ -16,13 +16,14 @@ class Workspace:
             """Fetch workspace details from domain."""
             url = f"{self.base_url}/rest/v17/organisation/web/config/{domain}"
             response = self.session.get(url)
-            if response.status_code == 200:
-                resp = response.json()
-                if resp.get('error') == False:
-                    self.workspace_instance = resp['data']
-                    self.logger.info(f"Workspace initialized: {self.workspace_instance['BUSINESS_DOMAIN']}")
-                else:
-                    raise ValueError(resp.get('message'))
+            response.raise_for_status()  # Raise an exception for HTTP errors
+            
+            resp = response.json()
+            if resp.get('error') == False:
+                self.workspace_instance = resp['data']
+                self.logger.info(f"Workspace initialized: {domain}")
+            else:
+                raise ValueError(resp.get('message'))
         except Exception as e:
             self.logger.error(e)
             raise e
