@@ -1,4 +1,3 @@
-import requests
 import hashlib
 
 class Auth:
@@ -36,7 +35,6 @@ class Auth:
             else:
                 raise ValueError(resp.get('message'))
             return resp
-        
         except Exception as e:
             self.logger.error(e)
             raise e

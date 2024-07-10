@@ -1,21 +1,27 @@
-import requests
-
 class Analytics:
-    def __init__(self, session, base_url):
+    def __init__(self, session, logger, base_url):
         self.session = session
+        self.logger = logger
         self.base_url = base_url
     
     def search(self, form_id, query):
-        """Fetch workspace details from domain."""
-        url = f"{self.base_url}/api/v1/analytics/search"
-        response = self.session.post(url, json={'formId': form_id, 'query': query})
-        if response.status_code == 200:
+        """
+        Fetch workspace details from domain.
+
+        :param form_id:
+        :param query:
+        :return:
+        """
+        try:
+            url = f"{self.base_url}/api/v1/analytics/search"
+            response = self.session.post(url, json={'formId': form_id, 'query': query})
+
             resp = response.json()
             if resp.get('error') == False:
-                print("search Success")
-                return resp['data']
+                self.logger.info(f"Successfully completed search operation for form {id}")
             else:
-                print("search Failed")
-                print(response.json())
-
-        return response.json()
+                raise ValueError(resp.get('message'))
+            return resp['data']
+        except Exception as e:
+            self.logger.error(e)
+            raise e

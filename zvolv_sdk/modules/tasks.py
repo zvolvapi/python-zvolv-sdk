@@ -1,81 +1,108 @@
-import requests
-
 from elasticsearch_dsl import Search as ESearch
 from ..models.task import Task
 
 class Tasks:
-    def __init__(self, session, base_url):
+    def __init__(self, session, logger, base_url):
         self.session = session
+        self.logger = logger
         self.base_url = base_url
         self.workspace_instance = None
     
     def get(self, id):
-        """Get form details from id"""
-        url = f"{self.base_url}/api/v1/tasks/{id}"
-        response = self.session.get(url)
-        if response.status_code == 200:
-            resp = response.json()
-            if resp.get('error') == False and resp['data']['elements']:
-                return Task(**resp['data']['elements'][0])
-            else:
-                print("Form get Failed")
-                print(response.json())
+        """
+        Get form details from id
 
-        return response.json()
+        :param id:
+        :return:
+        """
+        try:
+            url = f"{self.base_url}/api/v1/tasks/{id}"
+            response = self.session.get(url)
+
+            resp = response.json()
+            if resp.get('error') == False:
+                self.logger.info(f"Successfully fetched task for task {id}")
+            else:
+                raise ValueError(resp.get('message'))
+            return Task(**resp['data']['elements'][0])
+        except Exception as e:
+            self.logger.error(e)
+            raise e
     
     def search(self, searchObj: ESearch):
-        """Search tasks"""
+        """
+        Search tasks
 
+        :param searchObj:
+        :return:
+        """
         # Accept only elasticsearch-dsl Search object as searchObj
         if not isinstance(searchObj, ESearch):
             raise ValueError("searchObj field should be an instance of elasticsearch-dsl Search object")
 
-        query = searchObj.to_dict()
-        url = f"{self.base_url}/api/v1/analytics/search"
-        response = self.session.post(url, json={'isTask': True, 'query': query})
-        if response.status_code == 200:
-            resp = response.json()
-            if resp.get('error') == False and resp['data']['elements']:
-                return resp['data']
-            else:
-                print("Form search Failed")
-                print(response.json())
+        try:
+            query = searchObj.to_dict()
+            url = f"{self.base_url}/api/v1/analytics/search"
+            response = self.session.post(url, json={'isTask': True, 'query': query})
 
-        return response.json()
+            resp = response.json()
+            if resp.get('error') == False:
+                self.logger.info(f"Successfully completed search operation for task.")
+            else:
+                raise ValueError(resp.get('message'))
+            return resp['data']
+        except Exception as e:
+            self.logger.error(e)
+            raise e
     
     def put(self, task: Task):
-        """Update existing task"""
+        """
+        Update existing task
+
+        :param task:
+        :return:
+        """
         # task should be a valid Task model
         if not isinstance(task, Task):
             raise ValueError("task field should be an instance of Task model")
         # id or uuid field is required in the task model to update the task
         if not task.id and not task.uuid:
             raise ValueError("id or uuid field is required to update the task")
-        url = f"{self.base_url}/api/v1/tasks"
-        print(task.model_dump(exclude_none=True, exclude_unset=True))
-        response = self.session.put(url, json=task.model_dump(exclude_none=True, exclude_unset=True))
-        if response.status_code == 200:
+
+        try:
+            url = f"{self.base_url}/api/v1/tasks"
+            response = self.session.put(url, json=task.model_dump(exclude_none=True, exclude_unset=True))
+
             resp = response.json()
             if resp.get('error') == False:
-                return resp
+                self.logger.info(f"Successfully updated task for id {task.id}")
             else:
-                print("Form put Failed")
-                print(response.json())
-
-        return response.json()
+                raise ValueError(resp.get('message'))
+            return resp['data']
+        except Exception as e:
+            self.logger.error(e)
+            raise e
     
     def post(self, task: Task):
-        """Create a new task"""
+        """
+        Create a new task
+
+        :param task:
+        :return:
+        """
         if not isinstance(task, Task):
             raise ValueError("task field should be an instance of Task model")
-        url = f"{self.base_url}/api/v1/tasks"
-        response = self.session.post(url, json=task.model_dump(exclude_none=True, exclude_unset=True))
-        if response.status_code == 200:
+
+        try:
+            url = f"{self.base_url}/api/v1/tasks"
+            response = self.session.post(url, json=task.model_dump(exclude_none=True, exclude_unset=True))
+
             resp = response.json()
             if resp.get('error') == False:
-                return resp
+                self.logger.info(f"Successfully added a new entry for form {task.title}")
             else:
-                print("Form post Failed")
-                print(response.json())
-
-        return response.json()
+                raise ValueError(resp.get('message'))
+            return resp["data"]
+        except Exception as e:
+            self.logger.error(e)
+            raise e
