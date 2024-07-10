@@ -1,7 +1,10 @@
 -e .
-pyjwt
+pyJWT
 pytest
 pytest-mock
-Sphinx
-sphinx_rtd_theme
-sphinx_mdinclude
+sphinx
+sphinx-rtd-theme
+sphinx-mdinclude
+pydantic
+elasticsearch-dsl
+python-dotenv
