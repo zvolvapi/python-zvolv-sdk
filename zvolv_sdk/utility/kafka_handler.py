@@ -1,3 +1,4 @@
+import json
 import uuid
 import time
 from logging import Handler
@@ -50,10 +51,13 @@ class KafkaHandler(Handler):
         except Exception:
             self.handleError(record)
 
-    def emitStatusLog(self, status, message, exc_text):
+    def emitStatusLog(self, status, message, request_body, response_body, exc_text):
         if self.producer is None:
             return
-        
+        if request_body and not isinstance(request_body, str):
+            request_body = json.dumps(request_body)
+        if response_body and not isinstance(response_body, str):
+            response_body = json.dumps(response_body)
         try:
             log_body = {
                 "domain": self.domain,
@@ -64,6 +68,8 @@ class KafkaHandler(Handler):
                 "executed_by": self.execution_by,
                 "status": status,
                 "message": message,
+                "request_body": request_body,
+                "response_body": response_body,
                 "stack_trace": exc_text,
                 "log_type": "status"
             }

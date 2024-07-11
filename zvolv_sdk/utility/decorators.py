@@ -1,4 +1,5 @@
 from functools import wraps
+import traceback
 
 def enforce_pydantic_model(model_class):
     def decorator(func):
@@ -13,17 +14,19 @@ def enforce_pydantic_model(model_class):
         return wrapper
     return decorator
 
-def attach_status_log(func):
+def zvolv_wrapper(func):
     def wrapper(*args, **kwargs):
         context = args[0]
         event = args[1]
-        automation_uuid = event['headers']['x-nuclio-function-name']
-        context.client.logger.initExecutionLog(automation_uuid)
+        headers = event.headers
+        automation_uuid = headers['X-Nuclio-Function-Name']
+        context.client.logger.initExecutionLog(automation_uuid, event.body)
         try:
-            return func(*args, **kwargs)
+            result = func(*args, **kwargs)
+            context.client.logger.closeExecutionLog('success', 'Execution completed', result, None)
+            return result
         except Exception as e:
-            context.client.logger.closeExecutionLog('failed', str(e), None)
+            trace = traceback.format_exc()
+            context.client.logger.closeExecutionLog('failure', str(e), None, trace)
             raise
-        finally:
-            context.client.logger.closeExecutionLog('success', 'Execution completed', None)
     return wrapper

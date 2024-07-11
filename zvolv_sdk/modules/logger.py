@@ -20,15 +20,15 @@ class Logger:
         kafka_handler = KafkaHandler(producer, topic, domain)
         self.logger.addHandler(kafka_handler)
 
-    def initExecutionLog(self, automation_uuid):
+    def initExecutionLog(self, automation_uuid, event_body=None):
         kafka_handler = self.logger.handlers[1]
         kafka_handler.automation_uuid = automation_uuid
         kafka_handler.execution_id = uuid.uuid4().hex
-        kafka_handler.emitStatusLog('processing', 'Execution started', None)
+        kafka_handler.emitStatusLog('processing', 'Execution started', event_body, None, None)
 
-    def closeExecutionLog(self, status, message, exc_text):
+    def closeExecutionLog(self, status, message, response_body, exc_text):
         kafka_handler = self.logger.handlers[1]
-        kafka_handler.emitStatusLog(status, message, exc_text)
+        kafka_handler.emitStatusLog(status, message, None, response_body, exc_text)
 
     def info(self, message):
         """
