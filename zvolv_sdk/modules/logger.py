@@ -1,4 +1,5 @@
 import logging
+import uuid
 from ..utility.kafka_handler import KafkaHandler
 
 class Logger:
@@ -13,11 +14,21 @@ class Logger:
         console_handler.setFormatter(formatter)
         self.logger.addHandler(console_handler)
 
-    def addHandler(self, producer, domain, automation_uuid):
+    def addHandler(self, producer, domain):
         # Create & add handler to log messages to kafka topic
         topic = 'zeno.automations.log'
-        kafka_handler = KafkaHandler(producer, topic, domain, automation_uuid)
+        kafka_handler = KafkaHandler(producer, topic, domain)
         self.logger.addHandler(kafka_handler)
+
+    def initExecutionLog(self, automation_uuid):
+        kafka_handler = self.logger.handlers[1]
+        kafka_handler.automation_uuid = automation_uuid
+        kafka_handler.execution_id = uuid.uuid4().hex
+        kafka_handler.emitStatusLog('processing', 'Execution started', None)
+
+    def closeExecutionLog(self, status, message, exc_text):
+        kafka_handler = self.logger.handlers[1]
+        kafka_handler.emitStatusLog(status, message, exc_text)
 
     def info(self, message):
         """
