@@ -56,7 +56,7 @@ class Submissions:
             self.logger.error(e)
             raise e
     
-    def put(self, submission: Submission, skipValidation: bool = False, skipAutomation: bool = True, skipFormulaValidation: bool = False):
+    def put(self, submission: Submission, skipValidation: bool = True, skipAutomation: bool = True, skipFormulaValidation: bool = True):
         """Update existing submission"""
         if not isinstance(submission, Submission):
             raise ValueError("submission field should be an instance of Submission model")
@@ -82,7 +82,7 @@ class Submissions:
             self.logger.error(e)
             raise e
     
-    def post(self, submission: Submission, skipValidation: bool = False, skipAutomation: bool = True, skipFormulaValidation: bool = False):
+    def post(self, submission: Submission, skipValidation: bool = True, skipAutomation: bool = True, skipFormulaValidation: bool = True):
         """Create a new submission"""
         if not isinstance(submission, Submission):
             raise ValueError("submission field should be an instance of Submission model")

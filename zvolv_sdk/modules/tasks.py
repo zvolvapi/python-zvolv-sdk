@@ -18,6 +18,7 @@ class Tasks:
         try:
             url = f"{self.base_url}/api/v1/tasks/{id}"
             response = self.session.get(url)
+            response.raise_for_status()  # Raise an exception for HTTP errors
 
             resp = response.json()
             if resp.get('error') == False:
@@ -44,6 +45,7 @@ class Tasks:
             query = searchObj.to_dict()
             url = f"{self.base_url}/api/v1/analytics/search"
             response = self.session.post(url, json={'isTask': True, 'query': query})
+            response.raise_for_status()  # Raise an exception for HTTP errors
 
             resp = response.json()
             if resp.get('error') == False:
@@ -97,6 +99,7 @@ class Tasks:
         try:
             url = f"{self.base_url}/api/v1/tasks"
             response = self.session.post(url, json=task.model_dump(exclude_none=True, exclude_unset=True))
+            response.raise_for_status()  # Raise an exception for HTTP errors
 
             resp = response.json()
             if resp.get('error') == False:
