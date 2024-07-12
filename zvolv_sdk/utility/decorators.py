@@ -16,6 +16,7 @@ def enforce_pydantic_model(model_class):
 
 def zvolv_wrapper(func):
     def wrapper(context, event):
+        print('in decorator warpper')
         headers = event.headers
         automation_uuid = headers['X-Nuclio-Function-Name']
         print('check context')
