@@ -20,10 +20,11 @@ def zvolv_wrapper(func):
         headers = event.headers
         automation_uuid = headers['X-Nuclio-Function-Name']
         print('check context')
-        print(context.__dict__)
+        print(context.user_data.__dict__)
         print('check uuid')
         print(automation_uuid)
-        context.client.logger.initExecutionLog(automation_uuid, event.body)
+        client = getattr(context.user_data, 'client', None)
+        client.logger.initExecutionLog(automation_uuid, event.body)
         try:
             result = func(context, event)
             context.client.logger.closeExecutionLog('success', 'Execution completed', result, None)
