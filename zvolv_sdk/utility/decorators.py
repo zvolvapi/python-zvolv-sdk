@@ -15,14 +15,14 @@ def enforce_pydantic_model(model_class):
     return decorator
 
 def zvolv_wrapper(func):
-    def wrapper(*args, **kwargs):
-        context = args[0]
-        event = args[1]
+    def wrapper(context, event):
         headers = event.headers
         automation_uuid = headers['X-Nuclio-Function-Name']
+        print('check context')
+        print(context.__dict__)
         context.client.logger.initExecutionLog(automation_uuid, event.body)
         try:
-            result = func(*args, **kwargs)
+            result = func(context, event)
             context.client.logger.closeExecutionLog('success', 'Execution completed', result, None)
             return result
         except Exception as e:
