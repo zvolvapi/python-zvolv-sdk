@@ -15,6 +15,7 @@ class Analytics:
         try:
             url = f"{self.base_url}/api/v1/analytics/search"
             response = self.session.post(url, json={'formId': form_id, 'query': query})
+            response.raise_for_status()  # Raise an exception for HTTP errors
 
             resp = response.json()
             if resp.get('error') == False:

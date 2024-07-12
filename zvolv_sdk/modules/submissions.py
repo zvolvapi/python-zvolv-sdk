@@ -44,6 +44,7 @@ class Submissions:
             query = searchObj.to_dict()
             url = f"{self.base_url}/api/v1/analytics/search"
             response = self.session.post(url, json={'formId': formId, 'query': query})
+            response.raise_for_status()  # Raise an exception for HTTP errors
 
             resp = response.json()
             if resp.get('error') == False:
@@ -69,6 +70,7 @@ class Submissions:
         try:
             url = f"{self.base_url}/api/v1/submissions/{submission.id}?skipValidation={skipValidation}&skipAutomation={skipAutomation}&skipFormulaValidation={skipFormulaValidation}"
             response = self.session.put(url, json=submission.model_dump(exclude_none=True, exclude_unset=True))
+            response.raise_for_status()  # Raise an exception for HTTP errors
 
             resp = response.json()
             if resp.get('error') == False:
@@ -94,6 +96,7 @@ class Submissions:
         try:
             url = f"{self.base_url}/api/v1/submissions?skipValidation={skipValidation}&skipAutomation={skipAutomation}&skipFormulaValidation={skipFormulaValidation}"
             response = self.session.post(url, json=submission.model_dump(exclude_none=True, exclude_unset=True))
+            response.raise_for_status()  # Raise an exception for HTTP errors
 
             resp = response.json()
             if resp.get('error') == False:

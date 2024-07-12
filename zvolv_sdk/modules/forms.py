@@ -17,6 +17,7 @@ class Forms:
         try:
             url = f"{self.base_url}/api/v1/forms/{id}"
             response = self.session.get(url)
+            response.raise_for_status()  # Raise an exception for HTTP errors
 
             resp = response.json()
             if resp.get('error') == False:
@@ -47,6 +48,7 @@ class Forms:
         try:
             url = f"{self.base_url}/api/v1/forms?enableRetrofit={enableRetrofit}&enableReSync={enableReSync}"
             response = self.session.put(url, json=form.model_dump(exclude_none=True, exclude_unset=True))
+            response.raise_for_status()  # Raise an exception for HTTP errors
 
             resp = response.json()
             if resp.get('error') == False:
@@ -71,6 +73,7 @@ class Forms:
         try:
             url = f"{self.base_url}/api/v1/forms"
             response = self.session.post(url, json=form.model_dump(exclude_none=True, exclude_unset=True))
+            response.raise_for_status()  # Raise an exception for HTTP errors
 
             resp = response.json()
             if resp.get('error') == False:
