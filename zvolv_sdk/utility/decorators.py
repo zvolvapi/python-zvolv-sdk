@@ -15,7 +15,7 @@ def enforce_pydantic_model(model_class):
     return decorator
 
 def handler_wrapper(func):
-    def wrapper(context, event):
+    def handler(context, event):
         print('in decorator warpper')
         try:
             result = func(context, event)
@@ -25,4 +25,4 @@ def handler_wrapper(func):
             trace = traceback.format_exc()
             context.client.logger.closeExecutionLog('failure', str(e), None, trace)
             raise
-    return wrapper
+    return handler
