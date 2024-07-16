@@ -14,15 +14,17 @@ def enforce_pydantic_model(model_class):
         return wrapper
     return decorator
 
-def handler_wrapper(func):
-    def handler(context, event):
-        print('in decorator warpper')
+def automation_wrapper(func):
+    def wrapper(client, event):
+        headers = event.headers
+        automation_uuid = headers['X-Nuclio-Function-Name']
+        client.logger.initExecutionLog(automation_uuid, event.body)
         try:
-            result = func(context, event)
-            context.client.logger.closeExecutionLog('success', 'Execution completed', result, None)
+            result = func(client, event)
+            client.logger.closeExecutionLog('success', 'Execution completed', result, None)
             return result
         except Exception as e:
             trace = traceback.format_exc()
-            context.client.logger.closeExecutionLog('failure', str(e), None, trace)
+            client.logger.closeExecutionLog('failure', str(e), None, trace)
             raise
-    return handler
+    return wrapper
