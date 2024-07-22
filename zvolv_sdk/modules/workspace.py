@@ -24,6 +24,14 @@ class Workspace:
                 self.logger.info(f"Workspace initialized: {domain}")
             else:
                 raise ValueError(resp.get('message'))
+        except requests.exceptions.RequestException as http_err:
+            error_response = response.json()
+            status_code = error_response.get('statusCode', response.status_code)
+            error_message = error_response.get('message', str(http_err))
+
+            error_message = f"{status_code} Error: {error_message}"
+            self.logger.error(f"An error occurred: {error_message}")
+            raise requests.exceptions.HTTPError(error_message)
         except Exception as e:
             self.logger.error(e)
             raise e

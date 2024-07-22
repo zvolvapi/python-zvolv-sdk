@@ -1,4 +1,5 @@
 from ..modules.documents import Document
+import requests
 
 class Communication:
     def __init__(self, session, logger, base_url):
@@ -41,6 +42,14 @@ class Communication:
             else:
                 raise ValueError(resp.get('message'))
             return resp
+        except requests.exceptions.RequestException as http_err:
+            error_response = response.json()
+            status_code = error_response.get('statusCode', response.status_code)
+            error_message = error_response.get('message', str(http_err))
+
+            error_message = f"{status_code} Error: {error_message}"
+            self.logger.error(f"An error occurred: {error_message}")
+            raise requests.exceptions.HTTPError(error_message)
         except Exception as e:
             self.logger.error(e)
             raise e
@@ -101,6 +110,14 @@ class Communication:
             else:
                 raise ValueError(resp.get('message'))
             return resp
+        except requests.exceptions.RequestException as http_err:
+            error_response = response.json()
+            status_code = error_response.get('statusCode', response.status_code)
+            error_message = error_response.get('message', str(http_err))
+
+            error_message = f"{status_code} Error: {error_message}"
+            self.logger.error(f"An error occurred: {error_message}")
+            raise requests.exceptions.HTTPError(error_message)
         except Exception as e:
             self.logger.error(e)
             raise e

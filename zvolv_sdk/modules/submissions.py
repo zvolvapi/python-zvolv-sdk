@@ -8,7 +8,7 @@ class Submissions:
         self.logger = logger
         self.base_url = base_url
         self.workspace_instance = None
-    
+
     def get(self, id):
         """
         Get form submission details from id.
@@ -27,6 +27,14 @@ class Submissions:
             else:
                 raise ValueError(resp.get('message'))
             return Submission(**resp['data']['elements'][0])
+        except requests.exceptions.RequestException as http_err:
+            error_response = response.json()
+            status_code = error_response.get('statusCode', response.status_code)
+            error_message = error_response.get('message', str(http_err))
+
+            error_message = f"{status_code} Error: {error_message}"
+            self.logger.error(f"An error occurred: {error_message}")
+            raise requests.exceptions.HTTPError(error_message)
         except Exception as e:
             self.logger.error(e)
             raise e
@@ -37,7 +45,7 @@ class Submissions:
         # Accept only elasticsearch-dsl Search object as searchObj
         if not isinstance(searchObj, ESearch):
             raise ValueError("searchObj field should be an instance of elasticsearch-dsl Search object")
-        
+
         if not formId:
             raise ValueError("formId field is required to search the submissions")
 
@@ -53,10 +61,18 @@ class Submissions:
             else:
                 raise ValueError(resp.get('message'))
             return resp['data']
+        except requests.exceptions.RequestException as http_err:
+            error_response = response.json()
+            status_code = error_response.get('statusCode', response.status_code)
+            error_message = error_response.get('message', str(http_err))
+
+            error_message = f"{status_code} Error: {error_message}"
+            self.logger.error(f"An error occurred: {error_message}")
+            raise requests.exceptions.HTTPError(error_message)
         except Exception as e:
             self.logger.error(e)
             raise e
-    
+
     def put(self, submission: Submission, skipValidation: bool = True, skipAutomation: bool = True, skipFormulaValidation: bool = True):
         """Update existing submission"""
         if not isinstance(submission, Submission):
@@ -64,7 +80,7 @@ class Submissions:
 
         if not submission.id:
             raise ValueError("id field is required to update the submission")
-        
+
         if not submission.elements or submission.elements == []:
             raise ValueError("elements field with atleast 1 element is required to update the submission")
 
@@ -79,10 +95,18 @@ class Submissions:
             else:
                 raise ValueError(resp.get('message'))
             return resp
+        except requests.exceptions.RequestException as http_err:
+            error_response = response.json()
+            status_code = error_response.get('statusCode', response.status_code)
+            error_message = error_response.get('message', str(http_err))
+
+            error_message = f"{status_code} Error: {error_message}"
+            self.logger.error(f"An error occurred: {error_message}")
+            raise requests.exceptions.HTTPError(error_message)
         except Exception as e:
             self.logger.error(e)
             raise e
-    
+
     def post(self, submission: Submission, skipValidation: bool = True, skipAutomation: bool = True, skipFormulaValidation: bool = True):
         """Create a new submission"""
         if not isinstance(submission, Submission):
@@ -90,13 +114,14 @@ class Submissions:
 
         if not submission.formId:
             raise ValueError("formId field is required to create the submission")
-        
+
         if not submission.elements:
             raise ValueError("elements field is required to create the submission")
 
         try:
             url = f"{self.base_url}/api/v1/submissions?skipValidation={skipValidation}&skipAutomation={skipAutomation}&skipFormulaValidation={skipFormulaValidation}"
             response = self.session.post(url, json=submission.model_dump(exclude_none=True, exclude_unset=True))
+            print(response.content)
             response.raise_for_status()  # Raise an exception for HTTP errors
 
             resp = response.json()
