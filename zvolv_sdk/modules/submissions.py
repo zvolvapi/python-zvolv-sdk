@@ -1,5 +1,6 @@
 from elasticsearch_dsl import Search as ESearch
 from ..models.submission import Submission
+import requests
 
 class Submissions:
     def __init__(self, session, logger, base_url):
@@ -104,6 +105,14 @@ class Submissions:
             else:
                 raise ValueError(resp.get('message'))
             return resp
+        except requests.exceptions.RequestException as http_err:
+            error_response = response.json()
+            status_code = error_response.get('statusCode', response.status_code)
+            error_message = error_response.get('message', str(http_err))
+
+            error_message = f"{status_code} Error: {error_message}"
+            self.logger.error(f"An error occurred: {error_message}")
+            raise requests.exceptions.HTTPError(error_message)
         except Exception as e:
             self.logger.error(e)
             raise e
