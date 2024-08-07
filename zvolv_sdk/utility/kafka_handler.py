@@ -3,6 +3,7 @@ import uuid
 import time
 from logging import Handler
 
+
 class KafkaHandler(Handler):
     """
     A handler class which writes formatted logging records to kafka topic.
@@ -28,7 +29,7 @@ class KafkaHandler(Handler):
             return
         
         try:
-             # Format the log message
+            # Format the log message
             level = record.levelname
             status = 'success'
             if level != 'INFO':

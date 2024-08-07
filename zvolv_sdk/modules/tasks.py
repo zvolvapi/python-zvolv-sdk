@@ -2,6 +2,7 @@ from elasticsearch_dsl import Search as ESearch
 from ..models.task import Task
 import requests
 
+
 class Tasks:
     def __init__(self, session, logger, base_url):
         self.session = session
@@ -22,7 +23,7 @@ class Tasks:
             response.raise_for_status()  # Raise an exception for HTTP errors
 
             resp = response.json()
-            if resp.get('error') == False:
+            if resp.get('error') is False:
                 self.logger.info(f"Successfully fetched task for task {id}")
             else:
                 raise ValueError(resp.get('message'))
@@ -57,7 +58,7 @@ class Tasks:
             response.raise_for_status()  # Raise an exception for HTTP errors
 
             resp = response.json()
-            if resp.get('error') == False:
+            if resp.get('error') is False:
                 self.logger.info(f"Successfully completed search operation for task.")
             else:
                 raise ValueError(resp.get('message'))
@@ -94,7 +95,7 @@ class Tasks:
             response.raise_for_status()  # Raise an exception for HTTP errors
 
             resp = response.json()
-            if resp.get('error') == False:
+            if resp.get('error') is False:
                 self.logger.info(f"Successfully updated task for id {task.id}")
             else:
                 raise ValueError(resp.get('message'))
@@ -127,7 +128,7 @@ class Tasks:
             response.raise_for_status()  # Raise an exception for HTTP errors
 
             resp = response.json()
-            if resp.get('error') == False:
+            if resp.get('error') is False:
                 self.logger.info(f"Successfully added a new entry for form {task.title}")
             else:
                 raise ValueError(resp.get('message'))

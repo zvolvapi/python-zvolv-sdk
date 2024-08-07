@@ -1,18 +1,20 @@
-from ..modules.documents import Document
+from ..modules.documents import Documents
 import requests
+from typing import Union
 
-class Communication:
+
+class Communications:
     def __init__(self, session, logger, base_url):
         self.session = session
         self.logger = logger
         self.base_url = base_url
         self.workspace_instance = None
 
-    def sendMailToRoles(self, roles: list, subjectTemplateId: int, messageTemplateId: int, variables: dict, communicationType: str = "MAIL"):
+    def sendMailToRoles(self, roles: list, subjectTemplateId: Union[int, str], messageTemplateId: Union[int, str], variables: dict, communicationType: str = "MAIL"):
         """
         Send mail to roles.
 
-        :param roles: ["Role1, Role2, Role3, ...]
+        :param roles: ['Role1', 'Role2', 'Role3', ...]
         :param subjectTemplateId: Template ID of custom document
         :param messageTemplateId: Template ID of custom document
         :param variables:
@@ -20,16 +22,17 @@ class Communication:
         :return:
         """
         try:
-            document = Document(self.session, self.logger, self.base_url)
+            document = Documents(self.session, self.logger, self.base_url)
 
             subject = document.getCustomTemplateData(subjectTemplateId, variables)
             message = document.getCustomTemplateData(messageTemplateId, variables)
 
-            body = {}
-            body['groupname'] = roles
-            body['commtype'] = [communicationType]
-            body['title'] = subject
-            body['msg'] = message
+            body = {
+                'groupname': roles,
+                'commtype': [communicationType],
+                'title': subject,
+                'msg': message
+            }
 
             businessTag = dict(self.session.headers)["businessTagID"]
             url = f"{self.base_url}/rest/v13/usergroups/message/{businessTag}"
@@ -37,7 +40,7 @@ class Communication:
             response.raise_for_status()  # Raise an exception for HTTP errors
 
             resp = response.json()
-            if resp.get('error') == False:
+            if resp.get('error') is False:
                 self.logger.info(f"Email sent successfully.")
             else:
                 raise ValueError(resp.get('message'))
@@ -54,11 +57,11 @@ class Communication:
             self.logger.error(e)
             raise e
 
-    def sendMailToEmails(self, emails: list, subjectTemplateId: int, messageTemplateId: int, variables: dict, communicationType: str = "MAIL", cc=None, bcc=None, replyTo=None, attachments=None, userName=None, defaultFooter=False, verify=True):
+    def sendMailToEmails(self, emails: list, subjectTemplateId: Union[int, str], messageTemplateId: Union[int, str], variables: dict, communicationType: str = "MAIL", cc=None, bcc=None, replyTo=None, attachments=None, userName=None, defaultFooter=False, verify=True):
         """
         Send mail to email addresses.
 
-        :param emails: ["EmailId1", "EmailId2", ....]
+        :param emails: ['EmailId1', 'EmailId2', ....]
         :param subjectTemplateId:
         :param messageTemplateId:
         :param variables:
@@ -73,7 +76,7 @@ class Communication:
         :return:
         """
         try:
-            document = Document(self.session, self.logger, self.base_url)
+            document = Documents(self.session, self.logger, self.base_url)
 
             subject = document.getCustomTemplateData(subjectTemplateId, variables)
             message = document.getCustomTemplateData(messageTemplateId, variables)
@@ -105,7 +108,7 @@ class Communication:
             response.raise_for_status()  # Raise an exception for HTTP errors
 
             resp = response.json()
-            if resp.get('error') == False:
+            if resp.get('error') is False:
                 self.logger.info(f"Email sent successfully.")
             else:
                 raise ValueError(resp.get('message'))

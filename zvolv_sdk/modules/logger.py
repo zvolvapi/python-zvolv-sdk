@@ -2,6 +2,7 @@ import logging
 import uuid
 from ..utility.kafka_handler import KafkaHandler
 
+
 class Logger:
     def __init__(self, logLevel="INFO"):
         self.logger = logging.getLogger(__name__)

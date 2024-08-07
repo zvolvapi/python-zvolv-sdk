@@ -1,104 +1,117 @@
-from ..models.form import Form
+import json
+import urllib.parse
 import requests
 
 
-class Forms:
+class Roles:
     def __init__(self, session, logger, base_url):
         self.session = session
         self.logger = logger
         self.base_url = base_url
         self.workspace_instance = None
-    
-    def get(self, id):
-        """
-        Get form details from id
 
-        :param id:
-        :return:
+    def createRoles(self, rolesPayload: list):
+        """
+        Create roles.
+
+        :param rolesPayload: [
+                {
+                    'GroupName': 'Role_Name',
+                    'GroupDesc' : 'Role_Description'
+                }
+            ]
+        :return: A response indicating the success or failure of the operation.
         """
         try:
-            url = f"{self.base_url}/api/v1/forms/{id}"
+            url = f"{self.base_url}/rest/v13/roles"
+            response = self.session.post(url, json=rolesPayload)
+            response.raise_for_status()  # Raise an exception for HTTP errors
+
+            resp = response.json()
+            if resp.get('error') is False:
+                self.logger.info(f"Roles have been successfully created.")
+            else:
+                raise ValueError(resp.get('message'))
+            return resp
+        except requests.exceptions.RequestException as http_err:
+            error_response = response.json()
+            status_code = error_response.get('statusCode', response.status_code)
+            error_message = error_response.get('message', str(http_err))
+
+            error_message = f"{status_code} Error: {error_message}"
+            self.logger.error(f"An error occurred: {error_message}")
+            raise requests.exceptions.HTTPError(error_message)
+        except Exception as e:
+            self.logger.error(e)
+            raise e
+
+    def editRoles(self, rolesPayload: list):
+        """
+        Edit roles.
+
+        :param rolesPayload: {
+                'Role_ID': {
+                    'GroupName': 'Role_Name',
+                    'GroupDesc' : 'Role_Description'
+                }
+            }
+        :return: A response indicating the success or failure of the operation.
+        """
+        try:
+            url = f"{self.base_url}/rest/v13/roles"
+            response = self.session.put(url, json=rolesPayload)
+            response.raise_for_status()  # Raise an exception for HTTP errors
+
+            resp = response.json()
+            if resp.get('error') is False:
+                self.logger.info(f"Roles have been successfully edited.")
+            else:
+                raise ValueError(resp.get('message'))
+            return resp
+        except requests.exceptions.RequestException as http_err:
+            error_response = response.json()
+            status_code = error_response.get('statusCode', response.status_code)
+            error_message = error_response.get('message', str(http_err))
+
+            error_message = f"{status_code} Error: {error_message}"
+            self.logger.error(f"An error occurred: {error_message}")
+            raise requests.exceptions.HTTPError(error_message)
+        except Exception as e:
+            self.logger.error(e)
+            raise e
+
+    def getRolesDetail(self, rolesPayload: list):
+        """
+        Get roles detail.
+
+        :param rolesPayload: A list of role names (e.g., ['Role1', 'Role2', ...]).
+        :return: A list of dictionaries with the following keys:
+            {
+                'GroupID',
+                'GroupName',
+                'GroupDesc',
+                'GroupImageurl',
+                'GroupType',
+                'IsRole',
+                'ImmediateParents',
+                'ImmediateChildren',
+                'Users'
+            }
+        """
+        try:
+            filter_dict = {"filter": json.dumps([{"operator": "IN", "column": "GroupName", "value": rolesPayload}])}
+            # Encoding the filter dictionary into query parameters
+            filter_params = urllib.parse.urlencode(filter_dict)
+            url = f"{self.base_url}/rest/v13/roles?{filter_params}"
             response = self.session.get(url)
             response.raise_for_status()  # Raise an exception for HTTP errors
 
             resp = response.json()
             if resp.get('error') is False:
-                self.logger.info(f"Successfully fetched form for {id}")
+                self.logger.info(f"Successfully retrieved roles ID.")
             else:
                 raise ValueError(resp.get('message'))
-            return Form(**resp['data']['elements'][0])
-        except requests.exceptions.RequestException as http_err:
-            error_response = response.json()
-            status_code = error_response.get('statusCode', response.status_code)
-            error_message = error_response.get('message', str(http_err))
-
-            error_message = f"{status_code} Error: {error_message}"
-            self.logger.error(f"An error occurred: {error_message}")
-            raise requests.exceptions.HTTPError(error_message)
-        except Exception as e:
-            self.logger.error(e)
-            raise e
-
-    def put(self, form: Form, enableRetrofit: bool = False, enableReSync: bool = False):
-        """
-        Update existing form
-
-        :param form:
-        :param enableRetrofit:
-        :param enableReSync:
-        :return:
-        """
-        # form should be a valid Form model
-        if not isinstance(form, Form):
-            raise ValueError("form field should be an instance of Form model")
-        # id or uuid field is required in the form model to update the form
-        if not form.id and not form.uuid:
-            raise ValueError("id or uuid field is required to update the form")
-
-        try:
-            url = f"{self.base_url}/api/v1/forms?enableRetrofit={enableRetrofit}&enableReSync={enableReSync}"
-            response = self.session.put(url, json=form.model_dump(exclude_none=True, exclude_unset=True))
-            response.raise_for_status()  # Raise an exception for HTTP errors
-
-            resp = response.json()
-            if resp.get('error') is False:
-                self.logger.info(f"Successfully updated task for id {form.id}")
-            else:
-                raise ValueError(resp.get('message'))
-            return resp['data']
-        except requests.exceptions.RequestException as http_err:
-            error_response = response.json()
-            status_code = error_response.get('statusCode', response.status_code)
-            error_message = error_response.get('message', str(http_err))
-
-            error_message = f"{status_code} Error: {error_message}"
-            self.logger.error(f"An error occurred: {error_message}")
-            raise requests.exceptions.HTTPError(error_message)
-        except Exception as e:
-            self.logger.error(e)
-            raise e
-    
-    def post(self, form: Form):
-        """
-        Create a new form
-
-        :param form:
-        :return:
-        """
-        if not isinstance(form, Form):
-            raise ValueError("form field should be an instance of Form model")
-
-        try:
-            url = f"{self.base_url}/api/v1/forms"
-            response = self.session.post(url, json=form.model_dump(exclude_none=True, exclude_unset=True))
-            response.raise_for_status()  # Raise an exception for HTTP errors
-
-            resp = response.json()
-            if resp.get('error') is False:
-                self.logger.info(f"Successfully completed search operation for form {form.title}")
-            else:
-                raise ValueError(resp.get('message'))
-            return resp['data']
+            return resp["data"]
         except requests.exceptions.RequestException as http_err:
             error_response = response.json()
             status_code = error_response.get('statusCode', response.status_code)

@@ -1,32 +1,34 @@
-from ..models.form import Form
+import urllib.parse
 import requests
 
 
-class Forms:
+class Users:
     def __init__(self, session, logger, base_url):
         self.session = session
         self.logger = logger
         self.base_url = base_url
         self.workspace_instance = None
-    
-    def get(self, id):
-        """
-        Get form details from id
 
-        :param id:
+    def createUsers(self, userPayload: list):
+        """
+        Create user.
+
+        :param userPayload:
         :return:
         """
         try:
-            url = f"{self.base_url}/api/v1/forms/{id}"
-            response = self.session.get(url)
+            userPayload = [i.model_dump(exclude_none=True) for i in userPayload]
+
+            url = f"{self.base_url}/rest/v13/bulk/add/users"
+            response = self.session.post(url, json=userPayload)
             response.raise_for_status()  # Raise an exception for HTTP errors
 
             resp = response.json()
             if resp.get('error') is False:
-                self.logger.info(f"Successfully fetched form for {id}")
+                self.logger.info(f"User profile successfully created.")
             else:
                 raise ValueError(resp.get('message'))
-            return Form(**resp['data']['elements'][0])
+            return resp["data"]
         except requests.exceptions.RequestException as http_err:
             error_response = response.json()
             status_code = error_response.get('statusCode', response.status_code)
@@ -39,33 +41,32 @@ class Forms:
             self.logger.error(e)
             raise e
 
-    def put(self, form: Form, enableRetrofit: bool = False, enableReSync: bool = False):
+    def editUsers(self, userPayload: list):
         """
-        Update existing form
+        Create user.
 
-        :param form:
-        :param enableRetrofit:
-        :param enableReSync:
+        :param userPayload:
         :return:
         """
-        # form should be a valid Form model
-        if not isinstance(form, Form):
-            raise ValueError("form field should be an instance of Form model")
-        # id or uuid field is required in the form model to update the form
-        if not form.id and not form.uuid:
-            raise ValueError("id or uuid field is required to update the form")
-
         try:
-            url = f"{self.base_url}/api/v1/forms?enableRetrofit={enableRetrofit}&enableReSync={enableReSync}"
-            response = self.session.put(url, json=form.model_dump(exclude_none=True, exclude_unset=True))
+            newPayload = []
+            for user in userPayload:
+                if not user.EncryptedZviceID:
+                    raise Exception("User data validation failed: Missing EncryptedZviceID.")
+                elif not user.Profile.UserID:
+                    raise Exception("User data validation failed: Missing UserID in Profile.")
+                newPayload.append(user.model_dump(exclude_none=True))
+
+            url = f"{self.base_url}/rest/v13/bulk/edit/users"
+            response = self.session.put(url, json=newPayload)
             response.raise_for_status()  # Raise an exception for HTTP errors
 
             resp = response.json()
             if resp.get('error') is False:
-                self.logger.info(f"Successfully updated task for id {form.id}")
+                self.logger.info(f"User profile successfully created.")
             else:
                 raise ValueError(resp.get('message'))
-            return resp['data']
+            return resp["data"]
         except requests.exceptions.RequestException as http_err:
             error_response = response.json()
             status_code = error_response.get('statusCode', response.status_code)
@@ -77,28 +78,37 @@ class Forms:
         except Exception as e:
             self.logger.error(e)
             raise e
-    
-    def post(self, form: Form):
-        """
-        Create a new form
 
-        :param form:
+    def getUsers(self, userPayload: list = []):
+        """
+        Fetch user details.
+
+        :param userPayload: [
+                {
+                    "operator":"=",
+                    "value": "USER_EMAIL",
+                    "column": "UserEmail"   # Other inputs you can pass are 'UserID', 'UserPhone',
+                }
+            ]
         :return:
         """
-        if not isinstance(form, Form):
-            raise ValueError("form field should be an instance of Form model")
-
+        filters = {
+            "HideSpecialUserGroups": True
+        }
         try:
-            url = f"{self.base_url}/api/v1/forms"
-            response = self.session.post(url, json=form.model_dump(exclude_none=True, exclude_unset=True))
+            filter_dict = filters
+            # Encoding the filter dictionary into query parameters
+            filter_params = urllib.parse.urlencode(filter_dict)
+            url = f"{self.base_url}/rest/v17/search/users?{filter_params}"
+            response = self.session.post(url, json=userPayload)
             response.raise_for_status()  # Raise an exception for HTTP errors
 
             resp = response.json()
             if resp.get('error') is False:
-                self.logger.info(f"Successfully completed search operation for form {form.title}")
+                self.logger.info(f"PDF generated successfully for custom document {id}")
             else:
                 raise ValueError(resp.get('message'))
-            return resp['data']
+            return resp["data"]
         except requests.exceptions.RequestException as http_err:
             error_response = response.json()
             status_code = error_response.get('statusCode', response.status_code)

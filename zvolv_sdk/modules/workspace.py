@@ -1,5 +1,6 @@
 import requests
 
+
 class Workspace:
     def __init__(self, session, logger, base_url):
         self.session = session
@@ -19,7 +20,7 @@ class Workspace:
             response.raise_for_status()  # Raise an exception for HTTP errors
             
             resp = response.json()
-            if resp.get('error') == False:
+            if resp.get('error') is False:
                 self.workspace_instance = resp['data']
                 self.logger.info(f"Workspace initialized: {domain}")
             else:

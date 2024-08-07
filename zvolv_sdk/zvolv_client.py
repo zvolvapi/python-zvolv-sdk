@@ -7,17 +7,21 @@ from .modules.forms import Forms
 from .modules.submissions import Submissions
 from .modules.tasks import Tasks
 from .modules.logger import Logger
-from .modules.communication import Communication
-from .modules.documents import Document
+from .modules.communications import Communications
+from .modules.documents import Documents
+from .modules.roles import Roles
+from .modules.users import Users
+
 
 class ZvolvClient:
-    def __init__(self, base_url):
+    def __init__(self, base_url, verifySSL=True):
 
         if not base_url:
             raise ValueError("Base URL is required to initialize the client")
 
         self.base_url = base_url
         self.session = requests.Session()
+        self.session.verify = verifySSL     # Enable/Disable SSL verification
         self.logger = Logger()
         self._workspace_module = None
         self._auth_module = None
@@ -25,9 +29,10 @@ class ZvolvClient:
         self._forms_module = None
         self._submissions_module = None
         self._tasks_module = None
-        self._communication_module = None
-        self._document_module = None
-
+        self._communications_module = None
+        self._documents_module = None
+        self._roles_module = None
+        self._users_module = None
 
     @property
     def workspace(self):
@@ -80,22 +85,40 @@ class ZvolvClient:
         return self._tasks_module
 
     @property
-    def communication(self):
+    def communications(self):
 
         self.validate()
 
         if not self._communication_module:
-            self._communication_module = Communication(self.session, self.logger, self.base_url)
+            self._communication_module = Communications(self.session, self.logger, self.base_url)
         return self._communication_module
 
     @property
-    def document(self):
+    def documents(self):
 
         self.validate()
 
         if not self._document_module:
-            self._document_module = Document(self.session, self.logger, self.base_url)
+            self._document_module = Documents(self.session, self.logger, self.base_url)
         return self._document_module
+
+    @property
+    def roles(self):
+
+        self.validate()
+
+        if not self._roles_module:
+            self._roles_module = Roles(self.session, self.logger, self.base_url)
+        return self._roles_module
+
+    @property
+    def users(self):
+
+        self.validate()
+
+        if not self._users_module:
+            self._users_module = Users(self.session, self.logger, self.base_url)
+        return self._users_module
     
     # Validate if workspace and user are initialized
     def validate(self):

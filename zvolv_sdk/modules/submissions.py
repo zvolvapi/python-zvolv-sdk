@@ -2,6 +2,7 @@ from elasticsearch_dsl import Search as ESearch
 from ..models.submission import Submission
 import requests
 
+
 class Submissions:
     def __init__(self, session, logger, base_url):
         self.session = session
@@ -22,7 +23,7 @@ class Submissions:
             response.raise_for_status()  # Raise an exception for HTTP errors
 
             resp = response.json()
-            if resp.get('error') == False:
+            if resp.get('error') is False:
                 self.logger.info(f"Form details retrieved successfully for id {id}")
             else:
                 raise ValueError(resp.get('message'))
@@ -56,7 +57,7 @@ class Submissions:
             response.raise_for_status()  # Raise an exception for HTTP errors
 
             resp = response.json()
-            if resp.get('error') == False:
+            if resp.get('error') is False:
                 self.logger.info(f"Successfully completed search operation for form {id}")
             else:
                 raise ValueError(resp.get('message'))
@@ -90,7 +91,7 @@ class Submissions:
             response.raise_for_status()  # Raise an exception for HTTP errors
 
             resp = response.json()
-            if resp.get('error') == False:
+            if resp.get('error') is False:
                 self.logger.info(f"Successfully updated entry for id {submission.id}")
             else:
                 raise ValueError(resp.get('message'))
@@ -125,7 +126,7 @@ class Submissions:
             response.raise_for_status()  # Raise an exception for HTTP errors
 
             resp = response.json()
-            if resp.get('error') == False:
+            if resp.get('error') is False:
                 self.logger.info(f"Successfully added a new entry for form {submission.formId}")
             else:
                 raise ValueError(resp.get('message'))

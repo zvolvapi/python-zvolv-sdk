@@ -1,7 +1,8 @@
 import urllib.parse
 import requests
 
-class Document:
+
+class Documents:
     def __init__(self, session, logger, base_url):
         self.session = session
         self.logger = logger
@@ -22,7 +23,7 @@ class Document:
             response.raise_for_status()  # Raise an exception for HTTP errors
 
             resp = response.json()
-            if resp.get('error') == False:
+            if resp.get('error') is False:
                 self.logger.info(f"Template data retrieved successfully for custom document {id}")
             else:
                 raise ValueError(resp.get('message'))
@@ -53,7 +54,7 @@ class Document:
             response.raise_for_status()  # Raise an exception for HTTP errors
 
             resp = response.json()
-            if resp.get('error') == False:
+            if resp.get('error') is False:
                 self.logger.info(f"Template HTML retrieved successfully for custom document {id}")
             else:
                 raise ValueError(resp.get('message'))
@@ -106,7 +107,7 @@ class Document:
             response.raise_for_status()  # Raise an exception for HTTP errors
 
             resp = response.json()
-            if resp.get('error') == False:
+            if resp.get('error') is False:
                 self.logger.info(f"PDF generated successfully for custom document {id}")
             else:
                 raise ValueError(resp.get('message'))

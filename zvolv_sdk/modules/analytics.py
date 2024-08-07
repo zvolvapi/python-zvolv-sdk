@@ -1,11 +1,12 @@
 import requests
 
+
 class Analytics:
     def __init__(self, session, logger, base_url):
         self.session = session
         self.logger = logger
         self.base_url = base_url
-    
+
     def search(self, form_id, query):
         """
         Fetch workspace details from domain.
@@ -20,7 +21,7 @@ class Analytics:
             response.raise_for_status()  # Raise an exception for HTTP errors
 
             resp = response.json()
-            if resp.get('error') == False:
+            if resp.get('error') is False:
                 self.logger.info(f"Successfully completed search operation for form {id}")
             else:
                 raise ValueError(resp.get('message'))

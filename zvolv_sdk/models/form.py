@@ -1,6 +1,7 @@
 from pydantic import BaseModel
 from typing import List, Optional, Union
 
+
 class Element(BaseModel):
     id: Optional[str] = None
     elementId: Optional[str] = None
@@ -20,6 +21,7 @@ class Element(BaseModel):
     rbacConf: Optional[dict] = {}
     abacConf: Optional[dict] = {}
     showLabel: Optional[bool] = True
+
 
 class Form(BaseModel):
     id: Optional[str] = None

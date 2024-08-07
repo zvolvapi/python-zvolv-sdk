@@ -1,6 +1,7 @@
 from pydantic import BaseModel
 from typing import List, Optional
 
+
 class Task(BaseModel):
     id: Optional[int] = None
     uuid: Optional[str] = None

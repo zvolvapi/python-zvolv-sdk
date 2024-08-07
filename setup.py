@@ -14,19 +14,19 @@ with open(os.path.join(here, "README.md"), encoding="utf-8") as readme:
 
 
 setup(
-    name = 'zvolv_sdk',
+    name='zvolv_sdk',
     version=__version__,
     packages=find_packages(),
     license='MIT',
-    description = 'The Zvolv API Platform SDK for Python',
+    description='The Zvolv API Platform SDK for Python',
     long_description=long_description,
     long_description_content_type="text/markdown",
-    author = 'Akshay Jadhav',
-    author_email = 'support@zvolv.com',
+    author='Akshay Jadhav',
+    author_email='support@zvolv.com',
     python_requires=">=3.6.0",
-    url = 'https://github.com/zvolvapi/python-zvolv-sdk',
-    download_url = 'https://github.com/zvolvapi/python-zvolv-sdk/archive/v_01.tar.gz',    # I explain this later on
-    keywords = ['zvolv', 'zvolv-api', 'web-api', 'sdk', 'rest-api-client'],
+    url='https://github.com/zvolvapi/python-zvolv-sdk',
+    download_url='https://github.com/zvolvapi/python-zvolv-sdk/archive/v_01.tar.gz',    # I explain this later on
+    keywords=['zvolv', 'zvolv-api', 'web-api', 'sdk', 'rest-api-client'],
     install_requires=[
         'requests>=2.23.0',
         'pydantic>=2.7.3',

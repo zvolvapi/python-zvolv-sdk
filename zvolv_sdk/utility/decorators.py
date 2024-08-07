@@ -1,6 +1,7 @@
 from functools import wraps
 import traceback
 
+
 def enforce_pydantic_model(model_class):
     def decorator(func):
         @wraps(func)
@@ -13,6 +14,7 @@ def enforce_pydantic_model(model_class):
             return func(*args, **kwargs)
         return wrapper
     return decorator
+
 
 def automation_wrapper(func):
     def wrapper(client, event):

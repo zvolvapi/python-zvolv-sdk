@@ -10,6 +10,7 @@
 import os
 from zvolv_sdk import ZvolvClient
 
+
 def handler(context, event):
     context.logger.info('Initializing Zvolv Client')
     client = ZvolvClient(os.environ['HOST'])
