@@ -255,3 +255,28 @@ response = client.users.getUsers(userPayload)
 client.logger.info(response)
 ```
 
+
+
+## Passwords
+
+### Generate a random password.
+```python
+from zvolv_sdk.utility.passwords import generate_random_password
+
+config = {
+      "special": {"min": 2, "include": "@$#"},
+      "upper": {"min": 2},
+      "digits": {"min": 2},
+      "lower": {"min": 2}
+  }
+pwd = generate_random_password(configuration=config)
+client.logger.info(pwd)
+```
+
+### Hash a password using SHA-512.
+```python
+from zvolv_sdk.utility.passwords import password_encrypt_sha512
+
+pwd = password_encrypt_sha512("Password@123")
+client.logger.info(pwd)
+```
