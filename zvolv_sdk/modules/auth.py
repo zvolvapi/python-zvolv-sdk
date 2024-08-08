@@ -1,5 +1,5 @@
-import hashlib
 import requests
+from ..utility.passwords import password_encrypt_sha512
 
 class Auth:
     def __init__(self, session, logger, base_url, workspace_instance):
@@ -22,7 +22,7 @@ class Auth:
                 'businessDomain': self.workspace_instance['BUSINESS_DOMAIN'],
                 'businessTagId': self.workspace_instance['BUSINESS_TAG_ID'],
             }
-            sha512pwd = hashlib.sha512(password.encode('utf-8')).hexdigest()
+            sha512pwd = password_encrypt_sha512(password)
             data = {'email': email, 'password': sha512pwd}
             response = self.session.post(url, json=data, headers=headers)
             response.raise_for_status()  # Raise an exception for HTTP errors
@@ -30,7 +30,15 @@ class Auth:
             resp = response.json()
             if resp.get('error') == False:
                 token = resp['loginToken']
-                self.session.headers.update({'Authorization': f"Bearer {token}"})
+                headers = {
+                    'Authorization': f"Bearer {token}",
+                    'businessDomain': self.workspace_instance['BUSINESS_DOMAIN'],
+                    'jwt': token,
+                    'Content-type': 'application/json;charset=UTF-8',
+                    "device": 'script',
+                    'businessTagID': self.workspace_instance['BUSINESS_TAG_ID']
+                }
+                self.session.headers.update(headers)
                 self.user_instance = resp
                 self.logger.info(f"User {email} logged in")
             else:
