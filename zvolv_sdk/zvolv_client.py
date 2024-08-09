@@ -89,18 +89,18 @@ class ZvolvClient:
 
         self.validate()
 
-        if not self._communication_module:
-            self._communication_module = Communications(self.session, self.logger, self.base_url)
-        return self._communication_module
+        if not self._communications_module:
+            self._communications_module = Communications(self.session, self.logger, self.base_url)
+        return self._communications_module
 
     @property
     def documents(self):
 
         self.validate()
 
-        if not self._document_module:
-            self._document_module = Documents(self.session, self.logger, self.base_url)
-        return self._document_module
+        if not self._documents_module:
+            self._documents_module = Documents(self.session, self.logger, self.base_url)
+        return self._documents_module
 
     @property
     def roles(self):
