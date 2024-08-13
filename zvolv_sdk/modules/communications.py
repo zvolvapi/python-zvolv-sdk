@@ -10,32 +10,32 @@ class Communications:
         self.base_url = base_url
         self.workspace_instance = None
 
-    def sendMailToRoles(self, roles: list, subjectTemplateId: Union[int, str], messageTemplateId: Union[int, str], variables: dict, communicationType: str = "MAIL"):
+    def send_mail_to_roles(self, roles: list, subject_template_id: Union[int, str], message_template_id: Union[int, str], variables: dict, communication_type: str = "MAIL"):
         """
         Send mail to roles.
 
-        :param roles: ['Role1', 'Role2', 'Role3', ...]
-        :param subjectTemplateId: Template ID of custom document
-        :param messageTemplateId: Template ID of custom document
-        :param variables:
-        :param communicationType:
+        :param roles: List of roles to receive the email, e.g., ['Role1', 'Role2'].
+        :param subject_template_id: Template ID of custom document.
+        :param message_template_id: Template ID of custom document.
+        :param variables: Dictionary of variables to be used in the email templates.
+        :param communication_type: Type of communication, default is "MAIL".
         :return:
         """
         try:
             document = Documents(self.session, self.logger, self.base_url)
 
-            subject = document.getCustomTemplateData(subjectTemplateId, variables)
-            message = document.getCustomTemplateData(messageTemplateId, variables)
+            subject = document.get_custom_template_data(subject_template_id, variables)
+            message = document.get_custom_template_html(message_template_id, variables)
 
             body = {
                 'groupname': roles,
-                'commtype': [communicationType],
+                'commtype': [communication_type],
                 'title': subject,
                 'msg': message
             }
 
-            businessTag = dict(self.session.headers)["businessTagID"]
-            url = f"{self.base_url}/rest/v13/usergroups/message/{businessTag}"
+            business_tag = dict(self.session.headers)["businessTagID"]
+            url = f"{self.base_url}/rest/v13/usergroups/message/{business_tag}"
             response = self.session.post(url, json=body)
             response.raise_for_status()  # Raise an exception for HTTP errors
 
@@ -57,40 +57,39 @@ class Communications:
             self.logger.error(e)
             raise e
 
-    def sendMailToEmails(self, emails: list, subjectTemplateId: Union[int, str], messageTemplateId: Union[int, str], variables: dict, communicationType: str = "MAIL", cc=None, bcc=None, replyTo=None, attachments=None, userName=None, defaultFooter=False, verify=True):
+    def send_mail_to_emails(self, emails: list, subject_template_id: Union[int, str], message_template_id: Union[int, str], variables: dict, cc=None, bcc=None, reply_to=None, attachments=None, user_name=None, default_footer=False, verify=True):
         """
         Send mail to email addresses.
 
-        :param emails: ['EmailId1', 'EmailId2', ....]
-        :param subjectTemplateId:
-        :param messageTemplateId:
-        :param variables:
-        :param communicationType:
-        :param cc:
-        :param bcc:
-        :param replyTo:
-        :param attachments:
-        :param userName:
-        :param defaultFooter: True/False
-        :param verify: For SSL verification (True/False)
+        :param emails: List of email addresses to receive the email, e.g., ['EmailId1', 'EmailId2'].
+        :param subject_template_id: Template ID of custom document.
+        :param message_template_id: Template ID of custom document.
+        :param variables: Dictionary of variables to be used in the email templates.
+        :param cc: Optional list of email addresses to be added in the CC field.
+        :param bcc: Optional list of email addresses to be added in the BCC field.
+        :param reply_to: Optional email address to be used as the reply-to address.
+        :param attachments: Optional list of file attachments to include in the email.
+        :param user_name: Optional username to be associated with the email.
+        :param default_footer: Boolean flag to include or exclude default footer, default is False.
+        :param verify: Boolean flag for SSL verification, default is True.
         :return:
         """
         try:
             document = Documents(self.session, self.logger, self.base_url)
 
-            subject = document.getCustomTemplateData(subjectTemplateId, variables)
-            message = document.getCustomTemplateData(messageTemplateId, variables)
+            subject = document.get_custom_template_data(subject_template_id, variables)
+            message = document.get_custom_template_html(message_template_id, variables)
 
             emails = ','.join(emails)
-            businessTag = dict(self.session.headers)["businessTagID"]
+            business_tag = dict(self.session.headers)["businessTagID"]
 
             body = {
                 "email": emails,
-                "OrgName": businessTag,
+                "OrgName": business_tag,
                 "subject": subject,
                 "msg": message,
                 "attachments": attachments,
-                "defaultFooterHide": defaultFooter,
+                "defaultFooterHide": default_footer,
                 "verify": verify
             }
 
@@ -98,12 +97,12 @@ class Communications:
                 body['cc'] = cc
             if bcc:
                 body['bcc'] = bcc
-            if replyTo:
-                body['replyTo'] = replyTo
-            if userName:
-                body["username"] = userName
+            if reply_to:
+                body['replyTo'] = reply_to
+            if user_name:
+                body["username"] = user_name
 
-            url = f"{self.base_url}/rest/v13/{businessTag}/send/email"
+            url = f"{self.base_url}/rest/v13/{business_tag}/send/email"
             response = self.session.post(url, json=body)
             response.raise_for_status()  # Raise an exception for HTTP errors
 

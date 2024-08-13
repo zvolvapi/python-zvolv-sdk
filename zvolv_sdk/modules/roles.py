@@ -10,11 +10,11 @@ class Roles:
         self.base_url = base_url
         self.workspace_instance = None
 
-    def createRoles(self, rolesPayload: list):
+    def create_roles(self, roles_payload: list):
         """
         Create roles.
 
-        :param rolesPayload: [
+        :param roles_payload: [
                 {
                     'GroupName': 'Role_Name',
                     'GroupDesc' : 'Role_Description'
@@ -24,7 +24,7 @@ class Roles:
         """
         try:
             url = f"{self.base_url}/rest/v13/roles"
-            response = self.session.post(url, json=rolesPayload)
+            response = self.session.post(url, json=roles_payload)
             response.raise_for_status()  # Raise an exception for HTTP errors
 
             resp = response.json()
@@ -45,11 +45,11 @@ class Roles:
             self.logger.error(e)
             raise e
 
-    def editRoles(self, rolesPayload: list):
+    def edit_roles(self, roles_payload: list):
         """
         Edit roles.
 
-        :param rolesPayload: {
+        :param roles_payload: {
                 'Role_ID': {
                     'GroupName': 'Role_Name',
                     'GroupDesc' : 'Role_Description'
@@ -59,7 +59,7 @@ class Roles:
         """
         try:
             url = f"{self.base_url}/rest/v13/roles"
-            response = self.session.put(url, json=rolesPayload)
+            response = self.session.put(url, json=roles_payload)
             response.raise_for_status()  # Raise an exception for HTTP errors
 
             resp = response.json()
@@ -80,11 +80,11 @@ class Roles:
             self.logger.error(e)
             raise e
 
-    def getRolesDetail(self, rolesPayload: list):
+    def get_roles_detail(self, roles_payload: list):
         """
         Get roles detail.
 
-        :param rolesPayload: A list of role names (e.g., ['Role1', 'Role2', ...]).
+        :param roles_payload: A list of role names (e.g., ['Role1', 'Role2', ...]).
         :return: A list of dictionaries with the following keys:
             {
                 'GroupID',
@@ -99,7 +99,7 @@ class Roles:
             }
         """
         try:
-            filter_dict = {"filter": json.dumps([{"operator": "IN", "column": "GroupName", "value": rolesPayload}])}
+            filter_dict = {"filter": json.dumps([{"operator": "IN", "column": "GroupName", "value": roles_payload}])}
             # Encoding the filter dictionary into query parameters
             filter_params = urllib.parse.urlencode(filter_dict)
             url = f"{self.base_url}/rest/v13/roles?{filter_params}"

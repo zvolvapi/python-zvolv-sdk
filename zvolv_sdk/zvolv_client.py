@@ -14,14 +14,14 @@ from .modules.users import Users
 
 
 class ZvolvClient:
-    def __init__(self, base_url, verifySSL=True):
+    def __init__(self, base_url, verify_ssl=True):
 
         if not base_url:
             raise ValueError("Base URL is required to initialize the client")
 
         self.base_url = base_url
         self.session = requests.Session()
-        self.session.verify = verifySSL     # Enable/Disable SSL verification
+        self.session.verify = verify_ssl     # Enable/Disable SSL verification
         self.logger = Logger()
         self._workspace_module = None
         self._auth_module = None

@@ -61,7 +61,7 @@ except Error:
 > You can use any valid zvolv user's EMAIL & PASSWORD from your workspace
 
 ## API references
-Zvolv comprises of various modules to achieve respective business operations. Use below modules & methods to interact with Zvolv APIs.
+Zvolv comprises various modules to achieve respective business operations. Use below modules & methods to interact with Zvolv APIs.
 
 ### Forms
 #### Create a Form
@@ -177,7 +177,7 @@ response = client.tasks.search(search_obj)
 
 If you get stuck, we’re here to help. The following are the best ways to get assistance working through your issue:
 
-Use our [Github Issue Tracker][gh-issues] for reporting bugs or requesting features.
+Use our [GitHub Issue Tracker][gh-issues] for reporting bugs or requesting features.
 Visit the [Zvolv Community][zvolv-community] for getting help using Zvolv Developer Kit for Python or just generally bond with your fellow Zvolv developers.
 
 <!-- Markdown links -->

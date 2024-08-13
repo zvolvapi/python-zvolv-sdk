@@ -40,20 +40,29 @@ class Submissions:
             self.logger.error(e)
             raise e
 
-    def search(self, formId: str, searchObj: ESearch):
-        """Search submissions"""
+    def search(self, form_id: str, search_obj: ESearch):
+        """
+        Search the Analytics API to fetch data from a specific form.
+
+        This method sends a POST request to the Analytics API, which is based on Elasticsearch.
+        It searches the data associated with a specific form ID using the provided query parameters.
+
+        :param form_id: The ID of the form to search.
+        :param search_obj: The search query.
+        :return:
+        """
 
         # Accept only elasticsearch-dsl Search object as searchObj
-        if not isinstance(searchObj, ESearch):
+        if not isinstance(search_obj, ESearch):
             raise ValueError("searchObj field should be an instance of elasticsearch-dsl Search object")
 
-        if not formId:
+        if not form_id:
             raise ValueError("formId field is required to search the submissions")
 
         try:
-            query = searchObj.to_dict()
+            query = search_obj.to_dict()
             url = f"{self.base_url}/api/v1/analytics/search"
-            response = self.session.post(url, json={'formId': formId, 'query': query})
+            response = self.session.post(url, json={'formId': form_id, 'query': query})
             response.raise_for_status()  # Raise an exception for HTTP errors
 
             resp = response.json()
@@ -74,7 +83,7 @@ class Submissions:
             self.logger.error(e)
             raise e
 
-    def put(self, submission: Submission, skipValidation: bool = True, skipAutomation: bool = True, skipFormulaValidation: bool = True):
+    def put(self, submission: Submission, skip_validation: bool = True, skip_automation: bool = True, skip_formula_validation: bool = True):
         """Update existing submission"""
         if not isinstance(submission, Submission):
             raise ValueError("submission field should be an instance of Submission model")
@@ -83,10 +92,10 @@ class Submissions:
             raise ValueError("id field is required to update the submission")
 
         if not submission.elements or submission.elements == []:
-            raise ValueError("elements field with atleast 1 element is required to update the submission")
+            raise ValueError("elements field with least 1 element is required to update the submission")
 
         try:
-            url = f"{self.base_url}/api/v1/submissions/{submission.id}?skipValidation={skipValidation}&skipAutomation={skipAutomation}&skipFormulaValidation={skipFormulaValidation}"
+            url = f"{self.base_url}/api/v1/submissions/{submission.id}?skipValidation={skip_validation}&skipAutomation={skip_automation}&skipFormulaValidation={skip_formula_validation}"
             response = self.session.put(url, json=submission.model_dump(exclude_none=True, exclude_unset=True))
             response.raise_for_status()  # Raise an exception for HTTP errors
 
@@ -108,7 +117,7 @@ class Submissions:
             self.logger.error(e)
             raise e
 
-    def post(self, submission: Submission, skipValidation: bool = True, skipAutomation: bool = True, skipFormulaValidation: bool = True):
+    def post(self, submission: Submission, skip_validation: bool = True, skip_automation: bool = True, skip_formula_validation: bool = True):
         """Create a new submission"""
         if not isinstance(submission, Submission):
             raise ValueError("submission field should be an instance of Submission model")
@@ -120,7 +129,7 @@ class Submissions:
             raise ValueError("elements field is required to create the submission")
 
         try:
-            url = f"{self.base_url}/api/v1/submissions?skipValidation={skipValidation}&skipAutomation={skipAutomation}&skipFormulaValidation={skipFormulaValidation}"
+            url = f"{self.base_url}/api/v1/submissions?skipValidation={skip_validation}&skipAutomation={skip_automation}&skipFormulaValidation={skip_formula_validation}"
             response = self.session.post(url, json=submission.model_dump(exclude_none=True, exclude_unset=True))
             print(response.content)
             response.raise_for_status()  # Raise an exception for HTTP errors

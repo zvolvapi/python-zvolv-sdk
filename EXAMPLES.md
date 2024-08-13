@@ -89,7 +89,7 @@ variable = {
     'VARIABLE_1': 'VALUE_1',
     'VARIABLE_2': 'VALUE_2'
 }
-response = client.document.getCustomTemplateData(templateId, variable)
+response = client.documents.get_custom_template_data(templateId, variable)
 client.logger.info(response)
 ```
 
@@ -100,7 +100,7 @@ variable = {
     'VARIABLE_1': 'VALUE_1',
     'VARIABLE_2': 'VALUE_2'
 }
-response = client.document.getCustomTemplateHtml(templateId, variable)
+response = client.documents.get_custom_template_html(templateId, variable)
 client.logger.info(response)
 ```
 
@@ -116,7 +116,7 @@ messageId = 'CUSTOM_TEMPLATE_ID'
 variables = {
     'Body': 'My name is nishant'
 }
-response = client.communication.sendMailToRoles(roles, subjectId, messageId, variables)
+response = client.communications.send_mail_to_roles(roles, subjectId, messageId, variables)
 client.logger.info(response)
 ```
 
@@ -128,7 +128,7 @@ messageId = ' CUSTOM_TEMPLATE_ID'
 variables = {
     'Body': 'My name is nishant'
 }
-response = client.communication.sendMailToEmails(emails, subjectId, messageId, variables)
+response = client.communications.send_mail_to_emails(emails, subjectId, messageId, variables)
 client.logger.info(response)
 ```
 
@@ -144,7 +144,7 @@ rolesPayload = [
         'GroupDesc' : 'ROLE_DESCRIPTION'
     }
 ]
-response = client.roles.createRoles(rolesPayload)
+response = client.roles.create_roles(rolesPayload)
 client.logger.info(response)
 ```
 
@@ -156,14 +156,14 @@ roles = {
         'GroupDesc' : 'ROLE_DESCRIPTION'
     }
 }
-response = client.roles.editRoles(roles)
+response = client.roles.edit_roles(roles)
 client.logger.info(response)
 ```
 
 ### Get roles details
 ```python
 rolesPayload = ['ROLE_1', 'ROLE_2']
-response = client.roles.getRolesDetail(rolesPayload)
+response = client.roles.get_roles_detail(rolesPayload)
 client.logger.info(response)
 ```
 
@@ -201,7 +201,7 @@ user = User(
     ]
 )
 userPayload.append(user)
-response = client.users.createUsers(userPayload)
+response = client.users.create_users(userPayload)
 client.logger.info(response)
 print(response)
 ```
@@ -238,7 +238,7 @@ user = User(
 )
 userPayload = []
 userPayload.append(user)
-response = client.users.editUsers(userPayload)
+response = client.users.edit_users(userPayload)
 client.logger.info(response)
 ```
 
@@ -251,7 +251,7 @@ userPayload = [
         "column": "UserEmail"   # Options: UserEmail, UserID, UserPhone  
     }
 ]
-response = client.users.getUsers(userPayload)
+response = client.users.get_users(userPayload)
 client.logger.info(response)
 ```
 

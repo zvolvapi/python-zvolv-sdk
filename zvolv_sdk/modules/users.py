@@ -9,18 +9,18 @@ class Users:
         self.base_url = base_url
         self.workspace_instance = None
 
-    def createUsers(self, userPayload: list):
+    def create_users(self, user_payload: list):
         """
         Create user.
 
-        :param userPayload:
+        :param user_payload:
         :return:
         """
         try:
-            userPayload = [i.model_dump(exclude_none=True) for i in userPayload]
+            user_payload = [i.model_dump(exclude_none=True) for i in user_payload]
 
             url = f"{self.base_url}/rest/v13/bulk/add/users"
-            response = self.session.post(url, json=userPayload)
+            response = self.session.post(url, json=user_payload)
             response.raise_for_status()  # Raise an exception for HTTP errors
 
             resp = response.json()
@@ -41,24 +41,24 @@ class Users:
             self.logger.error(e)
             raise e
 
-    def editUsers(self, userPayload: list):
+    def edit_users(self, user_payload: list):
         """
         Create user.
 
-        :param userPayload:
+        :param user_payload:
         :return:
         """
         try:
-            newPayload = []
-            for user in userPayload:
+            new_payload = []
+            for user in user_payload:
                 if not user.EncryptedZviceID:
                     raise Exception("User data validation failed: Missing EncryptedZviceID.")
                 elif not user.Profile.UserID:
                     raise Exception("User data validation failed: Missing UserID in Profile.")
-                newPayload.append(user.model_dump(exclude_none=True))
+                new_payload.append(user.model_dump(exclude_none=True))
 
             url = f"{self.base_url}/rest/v13/bulk/edit/users"
-            response = self.session.put(url, json=newPayload)
+            response = self.session.put(url, json=new_payload)
             response.raise_for_status()  # Raise an exception for HTTP errors
 
             resp = response.json()
@@ -79,11 +79,11 @@ class Users:
             self.logger.error(e)
             raise e
 
-    def getUsers(self, userPayload: list = []):
+    def get_users(self, user_payload: list = None):
         """
         Fetch user details.
 
-        :param userPayload: [
+        :param user_payload: [
                 {
                     "operator":"=",
                     "value": "USER_EMAIL",
@@ -92,6 +92,8 @@ class Users:
             ]
         :return:
         """
+        if user_payload is None:
+            user_payload = []
         filters = {
             "HideSpecialUserGroups": True
         }
@@ -100,7 +102,7 @@ class Users:
             # Encoding the filter dictionary into query parameters
             filter_params = urllib.parse.urlencode(filter_dict)
             url = f"{self.base_url}/rest/v17/search/users?{filter_params}"
-            response = self.session.post(url, json=userPayload)
+            response = self.session.post(url, json=user_payload)
             response.raise_for_status()  # Raise an exception for HTTP errors
 
             resp = response.json()

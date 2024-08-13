@@ -1,4 +1,5 @@
 import requests
+from elasticsearch_dsl import Search as ESearch
 
 
 class Analytics:
@@ -7,15 +8,19 @@ class Analytics:
         self.logger = logger
         self.base_url = base_url
 
-    def search(self, form_id, query):
+    def search(self, form_id: str, search_obj: ESearch):
         """
-        Fetch workspace details from domain.
+        Search the Analytics API to fetch data from a specific form.
 
-        :param form_id:
-        :param query:
+        This method sends a POST request to the Analytics API, which is based on Elasticsearch.
+        It searches the data associated with a specific form ID using the provided query parameters.
+
+        :param form_id: The ID of the form to search.
+        :param search_obj: The search query.
         :return:
         """
         try:
+            query = search_obj.to_dict()
             url = f"{self.base_url}/api/v1/analytics/search"
             response = self.session.post(url, json={'formId': form_id, 'query': query})
             response.raise_for_status()  # Raise an exception for HTTP errors

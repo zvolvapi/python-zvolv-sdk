@@ -11,9 +11,9 @@ class Forms:
     
     def get(self, id):
         """
-        Get form details from id
+        Get form details using id
 
-        :param id:
+        :param id: The ID/formSubmissionID of the form to retrieve.
         :return:
         """
         try:
@@ -39,13 +39,13 @@ class Forms:
             self.logger.error(e)
             raise e
 
-    def put(self, form: Form, enableRetrofit: bool = False, enableReSync: bool = False):
+    def put(self, form: Form, enable_retrofit: bool = False, enable_resync: bool = False):
         """
         Update existing form
 
-        :param form:
-        :param enableRetrofit:
-        :param enableReSync:
+        :param form: An instance of the Form model to be updated.
+        :param enable_retrofit: Boolean flag to enable retrofit functionality.
+        :param enable_resync: Boolean flag to enable re-sync functionality.
         :return:
         """
         # form should be a valid Form model
@@ -56,7 +56,7 @@ class Forms:
             raise ValueError("id or uuid field is required to update the form")
 
         try:
-            url = f"{self.base_url}/api/v1/forms?enableRetrofit={enableRetrofit}&enableReSync={enableReSync}"
+            url = f"{self.base_url}/api/v1/forms?enableRetrofit={enable_retrofit}&enableReSync={enable_resync}"
             response = self.session.put(url, json=form.model_dump(exclude_none=True, exclude_unset=True))
             response.raise_for_status()  # Raise an exception for HTTP errors
 
@@ -82,7 +82,7 @@ class Forms:
         """
         Create a new form
 
-        :param form:
+        :param form: An instance of the Form model to be created.
         :return:
         """
         if not isinstance(form, Form):

@@ -1,6 +1,7 @@
 import requests
 from ..utility.passwords import password_encrypt_sha512
 
+
 class Auth:
     def __init__(self, session, logger, base_url, workspace_instance):
         self.session = session
@@ -9,7 +10,7 @@ class Auth:
         self.workspace_instance = workspace_instance
         self.user_instance = None
 
-    def login(self, email, password):
+    def login(self, email: str, password: str):
         """Authenticate a user and store their auth token."""
         try: 
             if not email or not password:
@@ -28,7 +29,7 @@ class Auth:
             response.raise_for_status()  # Raise an exception for HTTP errors
             
             resp = response.json()
-            if resp.get('error') == False:
+            if resp.get('error') is False:
                 token = resp['loginToken']
                 headers = {
                     'Authorization': f"Bearer {token}",

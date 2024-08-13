@@ -9,12 +9,12 @@ class Documents:
         self.base_url = base_url
         self.workspace_instance = None
 
-    def getCustomTemplateData(self, id: int, variables: dict):
+    def get_custom_template_data(self, id: int, variables: dict):
         """
         Get custom Template Data.
 
         :param id: Template ID of custom document
-        :param variables:
+        :param variables: Dictionary of variables to be used in the template.
         :return:
         """
         try:
@@ -40,12 +40,12 @@ class Documents:
             self.logger.error(e)
             raise e
 
-    def getCustomTemplateHtml(self, id: int, variables: dict):
+    def get_custom_template_html(self, id: int, variables: dict):
         """
         Get custom Template HTML.
 
         :param id: Template ID of custom document
-        :param variables:
+        :param variables: Dictionary of variables to be used in the template.
         :return:
         """
         try:
@@ -71,26 +71,24 @@ class Documents:
             self.logger.error(e)
             raise e
 
-    def getCustomDocumentLink(self, id: int, variables: dict, filters: dict = None):
+    def get_custom_document_link(self, id: int, variables: dict, filters: dict = None):
         """
         Generate PDF link using custom doc template.
 
         :param id: Template ID of custom document
-        :param variables:
-        :param filters: {
-                "header_doc_id": Header_Custom_Document_ID,
-                "footer":'"{0}"'.format("yes/no"),
-                "style":'"{0}"'.format("yes/no"),
-                "orientation":'"{0}"'.format("P/L"),    P=Portrait, L=Landscape
-                "margin_left":1,
-                "margin_right":2,
-                "margin_top":2,
-                "margin_bottom":2,
-                "margin_header":0,
-                "margin_footer":0,
-                "UseLogoAsWatermark":False
-            }
-            NOTE: Only send the filters that you require. Parameters for footer, style and orientation needs to be sent in the above specified format.
+        :param variables: Dictionary of variables to be used in the template.
+        :param filters: Optional dictionary of filters to apply to the document. The dictionary can include:
+            - "header_doc_id": Header Custom Document ID
+            - "footer": "yes/no"
+            - "style": "yes/no"
+            - "orientation": "P/L" (P = Portrait, L = Landscape)
+            - "margin_left": Left margin in integer units.
+            - "margin_right": Right margin in integer units.
+            - "margin_top": Top margin in integer units.
+            - "margin_bottom": Bottom margin in integer units.
+            - "margin_header": Header margin in integer units.
+            - "margin_footer": Footer margin in integer units.
+            - "UseLogoAsWatermark": Boolean value for watermark usage.
         :return:
         """
         if filters is None:

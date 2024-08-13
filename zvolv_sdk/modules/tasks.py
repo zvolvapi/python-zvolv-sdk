@@ -40,19 +40,19 @@ class Tasks:
             self.logger.error(e)
             raise e
     
-    def search(self, searchObj: ESearch):
+    def search(self, search_obj: ESearch):
         """
         Search tasks
 
-        :param searchObj:
+        :param search_obj:
         :return:
         """
         # Accept only elasticsearch-dsl Search object as searchObj
-        if not isinstance(searchObj, ESearch):
+        if not isinstance(search_obj, ESearch):
             raise ValueError("searchObj field should be an instance of elasticsearch-dsl Search object")
 
         try:
-            query = searchObj.to_dict()
+            query = search_obj.to_dict()
             url = f"{self.base_url}/api/v1/analytics/search"
             response = self.session.post(url, json={'isTask': True, 'query': query})
             response.raise_for_status()  # Raise an exception for HTTP errors

@@ -52,7 +52,7 @@ class KafkaHandler(Handler):
         except Exception:
             self.handleError(record)
 
-    def emitStatusLog(self, status, message, request_body, response_body, exc_text):
+    def emit_status_log(self, status, message, request_body, response_body, exc_text):
         if self.producer is None:
             return
         if request_body and not isinstance(request_body, str):
