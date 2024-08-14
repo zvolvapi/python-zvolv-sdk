@@ -280,3 +280,14 @@ from zvolv_sdk.utility.passwords import password_encrypt_sha512
 pwd = password_encrypt_sha512("Password@123")
 client.logger.info(pwd)
 ```
+
+
+
+## UserGroups
+
+### Get details of a user group.
+```python
+group_id = "GROUP_ID"
+response = (client.usergroups.fetch_usergroup_by_id(group_id))
+client.logger.info(response)
+```
