@@ -79,7 +79,7 @@ class Users:
             self.logger.error(e)
             raise e
 
-    def get_users(self, user_payload: list = None):
+    def get_users(self, user_payload: list = None, hide_special_usergroups: bool = True):
         """
         Fetch user details.
 
@@ -95,12 +95,11 @@ class Users:
         if user_payload is None:
             user_payload = []
         filters = {
-            "HideSpecialUserGroups": True
+            "HideSpecialUserGroups": hide_special_usergroups
         }
         try:
-            filter_dict = filters
             # Encoding the filter dictionary into query parameters
-            filter_params = urllib.parse.urlencode(filter_dict)
+            filter_params = urllib.parse.urlencode(filters)
             url = f"{self.base_url}/rest/v17/search/users?{filter_params}"
             response = self.session.post(url, json=user_payload)
             response.raise_for_status()  # Raise an exception for HTTP errors

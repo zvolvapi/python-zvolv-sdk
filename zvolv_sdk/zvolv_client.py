@@ -11,6 +11,7 @@ from .modules.communications import Communications
 from .modules.documents import Documents
 from .modules.roles import Roles
 from .modules.users import Users
+from .modules.usergroups import UserGroups
 
 
 class ZvolvClient:
@@ -33,6 +34,7 @@ class ZvolvClient:
         self._documents_module = None
         self._roles_module = None
         self._users_module = None
+        self._usergroups_module = None
 
     @property
     def workspace(self):
@@ -119,7 +121,16 @@ class ZvolvClient:
         if not self._users_module:
             self._users_module = Users(self.session, self.logger, self.base_url)
         return self._users_module
-    
+
+    @property
+    def usergroups(self):
+
+        self.validate()
+
+        if not self._usergroups_module:
+            self._usergroups_module = UserGroups(self.session, self.logger, self.base_url, self._workspace_module.workspace_instance)
+        return self._usergroups_module
+
     # Validate if workspace and user are initialized
     def validate(self):
         # Check if workspace is initialized 
