@@ -12,6 +12,8 @@ from .modules.documents import Documents
 from .modules.roles import Roles
 from .modules.users import Users
 from .modules.usergroups import UserGroups
+from .modules.workflows import Workflows
+from .modules.files import Files
 
 
 class ZvolvClient:
@@ -35,6 +37,8 @@ class ZvolvClient:
         self._roles_module = None
         self._users_module = None
         self._usergroups_module = None
+        self._workflows_module = None
+        self._files_module = None
 
     @property
     def workspace(self):
@@ -130,6 +134,24 @@ class ZvolvClient:
         if not self._usergroups_module:
             self._usergroups_module = UserGroups(self.session, self.logger, self.base_url, self._workspace_module.workspace_instance)
         return self._usergroups_module
+
+    @property
+    def workflows(self):
+
+        self.validate()
+
+        if not self._workflows_module:
+            self._workflows_module = Workflows(self.session, self.logger, self.base_url)
+        return self._workflows_module
+
+    @property
+    def files(self):
+
+        self.validate()
+
+        if not self._files_module:
+            self._files_module = Files(self.session, self.logger, self.base_url, self._workspace_module.workspace_instance)
+        return self._files_module
 
     # Validate if workspace and user are initialized
     def validate(self):

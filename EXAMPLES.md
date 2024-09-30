@@ -291,3 +291,35 @@ group_id = "GROUP_ID"
 response = (client.usergroups.fetch_usergroup_by_id(group_id))
 client.logger.info(response)
 ```
+
+
+
+## Projects
+
+### Fetch tasks metadata for a given workflow ID.
+```python
+wid = "WORK_FLOW_ID"
+response = client.workflows.get_project_tasks_metadata(wid, filter)
+client.logger.info(response)
+```
+
+
+
+## Files
+
+### Upload a file and get URL.
+```python
+file_name = "FILE_NAME"
+file_path = "FILE_PATH"
+response = client.files.upload_file(file_name, file_path)
+client.logger.info(response)
+```
+
+### Generate file upload metadata/element.
+```python
+absolute_file_path = "FILE_PATH"
+file_url = "FILE_URL"
+# NOTE: Provide either 'absolute_file_path' or 'file_url'
+response = client.files.get_file_upload_element(absolute_file_path, file_url)
+client.logger.info(response)
+```

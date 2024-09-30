@@ -17,6 +17,9 @@ class Submissions:
         :param id: FormSubmissionID/id of entry
         :return:
         """
+        if not id:
+            raise ValueError("id field is required to update the submission")
+
         try:
             url = f"{self.base_url}/api/v1/submissions/{id}"
             response = self.session.get(url)
@@ -131,7 +134,6 @@ class Submissions:
         try:
             url = f"{self.base_url}/api/v1/submissions?skipValidation={skip_validation}&skipAutomation={skip_automation}&skipFormulaValidation={skip_formula_validation}"
             response = self.session.post(url, json=submission.model_dump(exclude_none=True, exclude_unset=True))
-            print(response.content)
             response.raise_for_status()  # Raise an exception for HTTP errors
 
             resp = response.json()
