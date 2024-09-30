@@ -53,3 +53,60 @@ class Workflows:
             self.logger.error(e)
             raise e
 
+    def apply_task_metadata_changes(self, wid: str, task_tile: str, task_metadata_changes: dict):
+        """
+        Edit task metadata for a specific workflow ID.
+
+        This method allows you to apply changes to a task's metadata within a specified workflow.
+        It constructs a request body to update the task data based on the provided title and metadata changes.
+
+        :param wid: Workflow ID to which the changes are being applied.
+        :param task_tile: Title of the task whose metadata is being updated.
+        :param task_metadata_changes: Dictionary containing the metadata changes for the task.
+        :return: Response from the server containing the result of the update operation.
+
+        :raises ValueError: If the response contains an error message.
+        :raises requests.exceptions.HTTPError: For any HTTP-related errors during the request.
+        :raises Exception: For any other errors that may occur.
+        """
+        if not wid:
+            raise ValueError("id field is required to apply metadata changes.")
+
+        if not task_tile:
+            raise ValueError("task_tile field is required to apply metadata changes.")
+
+        if not task_metadata_changes:
+            raise ValueError("task_metadata_changes field is required to apply metadata changes.")
+
+        try:
+            body = {
+                'bulk_edit': [
+                    {
+                        'stage': {'title': task_tile},
+                        'data': {'task_data': task_metadata_changes}
+                    }
+                ]
+            }
+            url = f"{self.base_url}/rest/v17/workflow/{wid}/bulk/edit/wf"
+            response = self.session.put(url, json=body)
+            response.raise_for_status()  # Raise an exception for HTTP errors
+
+            resp = response.json()
+            if resp.get('error') is False:
+                self.logger.info(f"Successfully applied changes for task {task_tile}")
+            else:
+                raise ValueError(resp.get('message'))
+
+        except requests.exceptions.RequestException as http_err:
+            error_response = response.json()
+            status_code = error_response.get('statusCode', response.status_code)
+            error_message = error_response.get('message', str(http_err))
+
+            error_message = f"{status_code} Error: {error_message}"
+            self.logger.error(f"An error occurred while applying changes: {error_message}")
+            raise requests.exceptions.HTTPError(error_message)
+        except Exception as e:
+            self.logger.error(e)
+            raise e
+
+        return resp  # Return the last response received
