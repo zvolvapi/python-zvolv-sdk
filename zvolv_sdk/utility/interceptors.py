@@ -3,4 +3,4 @@ def handler_startup(context, event):
     headers = event.headers
     automation_uuid = headers['X-Nuclio-Function-Name']
     client = getattr(context, 'client', None)
-    client.logger.initExecutionLog(automation_uuid, event.body)
+    client.logger.init_execution_log(automation_uuid, event.body)

@@ -20,13 +20,13 @@ def automation_wrapper(func):
     def wrapper(client, event):
         headers = event.headers
         automation_uuid = headers['X-Nuclio-Function-Name']
-        client.logger.initExecutionLog(automation_uuid, event.body)
+        client.logger.init_execution_log(automation_uuid, event.body)
         try:
             result = func(client, event)
-            client.logger.closeExecutionLog('success', 'Execution completed', result, None)
+            client.logger.close_execution_log('success', 'Execution completed', result, None)
             return result
         except Exception as e:
             trace = traceback.format_exc()
-            client.logger.closeExecutionLog('failure', str(e), None, trace)
+            client.logger.close_execution_log('failure', str(e), None, trace)
             raise
     return wrapper
