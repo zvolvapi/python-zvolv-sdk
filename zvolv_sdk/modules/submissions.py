@@ -1,6 +1,7 @@
 from elasticsearch_dsl import Search as ESearch
 from ..models.submission import Submission
 import requests
+import urllib.parse
 
 
 class Submissions:
@@ -86,8 +87,17 @@ class Submissions:
             self.logger.error(e)
             raise e
 
-    def put(self, submission: Submission, skip_validation: bool = True, skip_automation: bool = True, skip_formula_validation: bool = True):
-        """Update existing submission"""
+    def put(self, submission: Submission, query_params: dict = None):
+        """Update existing submission
+
+        :param submission: An instance of the Submission model representing the submission to update.
+        :param query_params: Optional dictionary of query parameters to modify the update behavior.
+                        Possible keys include:
+                        - "skipValidations": "true"/"false"
+                        - "skipAutomation": "true"/"false"
+                        - "skipFormulaValidation": "true"/"false"
+        :return:
+        """
         if not isinstance(submission, Submission):
             raise ValueError("submission field should be an instance of Submission model")
 
@@ -98,7 +108,13 @@ class Submissions:
             raise ValueError("elements field with least 1 element is required to update the submission")
 
         try:
-            url = f"{self.base_url}/api/v1/submissions/{submission.id}?skipValidation={skip_validation}&skipAutomation={skip_automation}&skipFormulaValidation={skip_formula_validation}"
+            if query_params:
+                # Encoding the query_params dictionary into query parameters
+                query_params = urllib.parse.urlencode(query_params)
+                url = f"{self.base_url}/api/v1/submissions/{submission.id}?{query_params}"
+            else:
+                url = f"{self.base_url}/api/v1/submissions/{submission.id}"
+
             response = self.session.put(url, json=submission.model_dump(exclude_none=True, exclude_unset=True))
             response.raise_for_status()  # Raise an exception for HTTP errors
 
@@ -120,8 +136,17 @@ class Submissions:
             self.logger.error(e)
             raise e
 
-    def post(self, submission: Submission, skip_validation: bool = True, skip_automation: bool = True, skip_formula_validation: bool = True):
-        """Create a new submission"""
+    def post(self, submission: Submission, query_params: dict = None):
+        """Create a new submission
+
+        :param submission: An instance of the Submission model representing the submission to create.
+        :param query_params: Optional dictionary of query parameters to modify the update behavior.
+                        Possible keys include:
+                        - "skipValidations": "true"/"false"
+                        - "skipAutomation": "true"/"false"
+                        - "skipFormulaValidation": "true"/"false"
+        :return:
+        """
         if not isinstance(submission, Submission):
             raise ValueError("submission field should be an instance of Submission model")
 
@@ -132,7 +157,13 @@ class Submissions:
             raise ValueError("elements field is required to create the submission")
 
         try:
-            url = f"{self.base_url}/api/v1/submissions?skipValidation={skip_validation}&skipAutomation={skip_automation}&skipFormulaValidation={skip_formula_validation}"
+            if query_params:
+                # Encoding the query_params dictionary into query parameters
+                query_params = urllib.parse.urlencode(query_params)
+                url = f"{self.base_url}/api/v1/submissions?{query_params}"
+            else:
+                url = f"{self.base_url}/api/v1/submissions"
+
             response = self.session.post(url, json=submission.model_dump(exclude_none=True, exclude_unset=True))
             response.raise_for_status()  # Raise an exception for HTTP errors
 
