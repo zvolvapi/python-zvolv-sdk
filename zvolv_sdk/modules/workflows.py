@@ -53,15 +53,15 @@ class Workflows:
             self.logger.error(e)
             raise e
 
-    def apply_task_metadata_changes(self, wid: str, task_tile: str, task_metadata_changes: dict):
+    def apply_task_metadata_changes(self, wid: str, stage_code: str, task_metadata_changes: dict):
         """
         Edit task metadata for a specific workflow ID.
 
         This method allows you to apply changes to a task's metadata within a specified workflow.
-        It constructs a request body to update the task data based on the provided title and metadata changes.
+        It constructs a request body to update the task data based on the provided stage code and metadata changes.
 
         :param wid: Workflow ID to which the changes are being applied.
-        :param task_tile: Title of the task whose metadata is being updated.
+        :param stage_code: Stage code of the task whose metadata is being updated.
         :param task_metadata_changes: Dictionary containing the metadata changes for the task.
         :return: Response from the server containing the result of the update operation.
 
@@ -72,8 +72,8 @@ class Workflows:
         if not wid:
             raise ValueError("id field is required to apply metadata changes.")
 
-        if not task_tile:
-            raise ValueError("task_tile field is required to apply metadata changes.")
+        if not stage_code:
+            raise ValueError("stage_code field is required to apply metadata changes.")
 
         if not task_metadata_changes:
             raise ValueError("task_metadata_changes field is required to apply metadata changes.")
@@ -82,7 +82,7 @@ class Workflows:
             body = {
                 'bulk_edit': [
                     {
-                        'stage': {'title': task_tile},
+                        'stage': {'code': stage_code},
                         'data': {'task_data': task_metadata_changes}
                     }
                 ]
@@ -93,7 +93,7 @@ class Workflows:
 
             resp = response.json()
             if resp.get('error') is False:
-                self.logger.info(f"Successfully applied changes for task {task_tile}")
+                self.logger.info(f"Successfully applied changes for task {stage_code} in project {wid}.")
             else:
                 raise ValueError(resp.get('message'))
 
