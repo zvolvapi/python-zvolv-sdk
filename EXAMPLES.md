@@ -38,22 +38,25 @@ client.logger.info(response)
 
 ### Search Operation
 ```python
-from elasticsearch_dsl import Q, Search
+from elasticsearch_dsl import Search
 
-# term - Q('term', field='exact value')
-# terms - Q('terms', field=['value1', 'value2'])
-# match - Q('match', field='search text')
+must_conditions = [
+    # For partial/full-text search (case-insensitive, tokenized)
+    # This will match any document that contains "Sharma" in the "Employee Name" field, 
+    # regardless of case or word boundaries.
+    {"match": {"Employee Name": "Sharma"}},
+    
+    # For exact match (case-sensitive, raw field)
+    # This will match only exact "Sharma" in the "Employee Name" field as it uses the ".Keyword" 
+    # field which is not analyzed and stores the value as-is.
+    {"match": {"Employee Name.Keyword": "Sharma"}} 
+]
 
-search_obj = Search()
-bool_query = Q('bool', must=[
-    Q('term', FIELD_LABEL1='FIELD_VALUE1'),
-    Q('term', FIELD2_LABEL2='FIELD_VALUE2')
-])
-search_obj = search_obj.query(bool_query)
-
-formID = 'FORM_ID'
-response = client.submissions.search(formID, search_obj)
-client.logger.info(response)
+form_id = "6798a5dbdce5d31ce99ed040"
+search_obj = Search().query("bool", must=must_conditions)
+result = client.submissions.search(form_id=form_id, search_obj=search_obj)
+print(result)
+print(result["total_count"])
 ```
 
 ### Put Submission
@@ -288,7 +291,19 @@ client.logger.info(pwd)
 ### Get details of a user group.
 ```python
 group_id = "GROUP_ID"
-response = (client.usergroups.fetch_usergroup_by_id(group_id))
+response = client.usergroups.fetch_usergroup_by_id(group_id)
+client.logger.info(response)
+```
+
+### Create Project.
+```python
+title = "FORM_TITLE"
+formID = "FORM_ID"
+form_input_data = {
+    "FIELD_LABEL1": "FIELD_VALUE1",
+    "FIELD_LABEL2": "FIELD_VALUE2"
+}
+response = client.workflows.create_project(title, "17503", form_input_data)
 client.logger.info(response)
 ```
 

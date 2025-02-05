@@ -72,7 +72,8 @@ class Files:
                 files = {'file': (filename, file)}
                 url = f"{self.base_url}/rest/v17/{self.workspace_instance['BUSINESS_TAG_ID']}/{self.workspace_instance['BUSINESS_TAG_ID']}/fileupload/"
 
-                del self.session.headers["Content-type"]
+                if 'content-type' in self.session.headers or "Content-type" in self.session.headers:
+                    del self.session.headers["Content-type"]
                 response = self.session.post(url, files=files)
                 response.raise_for_status()  # Raise an exception for HTTP errors
 

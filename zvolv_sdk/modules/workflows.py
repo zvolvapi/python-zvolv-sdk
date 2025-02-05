@@ -110,3 +110,54 @@ class Workflows:
             raise e
 
         return resp  # Return the last response received
+
+
+    def create_project(self, title: str, formID: str, form_input_data: dict):
+        """
+        Create a new project.
+
+        :param title: The title of the project (required).
+        :param formID: The form ID (required).
+        :param form_input_data: Dictionary containing form input data.
+
+        :raises ValueError: If required parameters are missing.
+        :raises requests.exceptions.HTTPError: For HTTP request errors.
+        :raises Exception: For any other errors during execution.
+        """
+        if not title:
+            raise ValueError("The 'title' field is required to create or update the project.")
+
+        if not formID:
+            raise ValueError("The 'formID' field is required to associate with the project.")
+
+        try:
+            business_tag = dict(self.session.headers)["businessTagID"]
+            body = {
+                'title': title,
+                'pcf_form_id': formID,
+                'pcf_sub': form_input_data
+            }
+
+            url = f"{self.base_url}/rest/v17/workflow/{business_tag}"
+            response = self.session.post(url, json=body)
+            response.raise_for_status()  # Raise an exception for HTTP errors
+
+            resp = response.json()
+            if resp.get('error') is False:
+                self.logger.info(f"Successfully created project '{title}' (Form ID: {formID}).")
+            else:
+                raise ValueError(f"Failed to create project: {resp.get('message')}")
+
+        except requests.exceptions.RequestException as http_err:
+            error_response = response.json()
+            status_code = error_response.get('statusCode', response.status_code)
+            error_message = error_response.get('message', str(http_err))
+
+            error_message = f"{status_code} Error: {error_message}"
+            self.logger.error(f"An HTTP error occurred while creating the project:: {error_message}")
+            raise requests.exceptions.HTTPError(error_message)
+        except Exception as e:
+            self.logger.error(e)
+            raise e
+
+        return resp  # Return the last response received
