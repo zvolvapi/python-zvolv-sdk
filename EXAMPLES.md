@@ -44,19 +44,57 @@ must_conditions = [
     # For partial/full-text search (case-insensitive, tokenized)
     # This will match any document that contains "Sharma" in the "Employee Name" field, 
     # regardless of case or word boundaries.
-    {"match": {"Employee Name": "Sharma"}},
+    {"match": {"Employee Name": "Nishant"}},
     
     # For exact match (case-sensitive, raw field)
     # This will match only exact "Sharma" in the "Employee Name" field as it uses the ".Keyword" 
     # field which is not analyzed and stores the value as-is.
-    {"match": {"Employee Name.Keyword": "Sharma"}} 
+    {"match": {"Employee Name.keyword": "Nishant"}} 
 ]
 
-form_id = "6798a5dbdce5d31ce99ed040"
+form_id = 'FORM_ID'
 search_obj = Search().query("bool", must=must_conditions)
 result = client.submissions.search(form_id=form_id, search_obj=search_obj)
 print(result)
 print(result["total_count"])
+
+
+## FETCH MULTIPLE ENTRIES FROM Elasticsearch AND HANDLE PAGINATION.
+# Specify how many records you want to fetch per page
+page_size = 500  # Adjust this number based on your requirements
+
+# Initialize the search object without conditions
+search_obj = Search().extra(size=page_size)
+
+# To handle pagination, we will loop through the pages until we reach the last page
+page_number = 0
+total_count = 0
+all_results = []
+
+while True:
+    # Set the 'from' to handle pagination and 'size' to define the number of results per page
+    search_obj = search_obj.extra(from_=page_number * page_size)
+
+    # Perform the search
+    result = client.submissions.search(form_id=form_id, search_obj=search_obj)
+
+    # Extract the total count and elements
+    total_count = result["total_count"]
+    elements = result["elements"]
+
+    # Append the current page's results to the all_results list
+    all_results.extend(elements)
+
+    # Break if there are no more results
+    if len(elements) < page_size:
+        break
+
+    # Move to the next page
+    page_number += 1
+
+# After the loop, you have all the results in all_results
+print(f"Total count: {total_count}")
+print(f"Number of fetched elements: {len(all_results)}")
 ```
 
 ### Put Submission
