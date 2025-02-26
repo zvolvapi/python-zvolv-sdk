@@ -77,7 +77,7 @@ class ZvolvClient:
         self.validate()
 
         if not self._submissions_module:
-            self._submissions_module = Submissions(self.session, self.logger, base_url="http://bifrost")
+            self._submissions_module = Submissions(self.session, self.logger, base_url=self.base_url)
         return self._submissions_module
     
     @property
@@ -95,7 +95,7 @@ class ZvolvClient:
         self.validate()
 
         if not self._communications_module:
-            self._communications_module = Communications(self.session, self.logger, base_url="http://bifrost")
+            self._communications_module = Communications(self.session, self.logger, base_url="http://zserver")
         return self._communications_module
 
     @property
@@ -104,7 +104,7 @@ class ZvolvClient:
         self.validate()
 
         if not self._documents_module:
-            self._documents_module = Documents(self.session, self.logger, base_url="http://bifrost")
+            self._documents_module = Documents(self.session, self.logger, base_url="http://zserver")
         return self._documents_module
 
     @property
@@ -113,7 +113,7 @@ class ZvolvClient:
         self.validate()
 
         if not self._roles_module:
-            self._roles_module = Roles(self.session, self.logger, base_url="http://bifrost")
+            self._roles_module = Roles(self.session, self.logger, base_url="http://zserver")
         return self._roles_module
 
     @property
@@ -122,7 +122,7 @@ class ZvolvClient:
         self.validate()
 
         if not self._users_module:
-            self._users_module = Users(self.session, self.logger, base_url="http://bifrost")
+            self._users_module = Users(self.session, self.logger, base_url="http://zserver")
         return self._users_module
 
     @property
@@ -131,7 +131,7 @@ class ZvolvClient:
         self.validate()
 
         if not self._usergroups_module:
-            self._usergroups_module = UserGroups(self.session, self.logger, self._workspace_module.workspace_instance, base_url="http://bifrost")
+            self._usergroups_module = UserGroups(self.session, self.logger, self._workspace_module.workspace_instance, base_url="http://zserver")
         return self._usergroups_module
 
     @property
@@ -140,7 +140,7 @@ class ZvolvClient:
         self.validate()
 
         if not self._workflows_module:
-            self._workflows_module = Workflows(self.session, self.logger, base_url="http://bifrost")
+            self._workflows_module = Workflows(self.session, self.logger, base_url="http://zserver")
         return self._workflows_module
 
     @property
@@ -149,7 +149,7 @@ class ZvolvClient:
         self.validate()
 
         if not self._files_module:
-            self._files_module = Files(self.session, self.logger, self._workspace_module.workspace_instance, base_url="http://bifrost")
+            self._files_module = Files(self.session, self.logger, self._workspace_module.workspace_instance, base_url="http://zserver")
         return self._files_module
 
     # Validate if workspace and user are initialized

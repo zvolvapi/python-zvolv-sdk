@@ -23,7 +23,7 @@ class UserGroups:
         try:
             # Encoding the filter dictionary into query parameters
             filter_params = urllib.parse.urlencode(filters)
-            url = f"http://app.twigme.in/rest/v17/usergroups/{group_id}/{self.workspace_instance['BUSINESS_TAG_ID']}?{filter_params}"
+            url = f"{self.base_url}/rest/v17/usergroups/{group_id}/{self.workspace_instance['BUSINESS_TAG_ID']}?{filter_params}"
             response = self.session.get(url)
             response.raise_for_status()  # Raise an exception for HTTP errors
 
