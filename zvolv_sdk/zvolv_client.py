@@ -77,7 +77,7 @@ class ZvolvClient:
         self.validate()
 
         if not self._submissions_module:
-            self._submissions_module = Submissions(self.session, self.logger, base_url=self.base_url)
+            self._submissions_module = Submissions(self.session, self.logger, base_url="http://bifrost")
         return self._submissions_module
     
     @property
