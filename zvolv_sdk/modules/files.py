@@ -43,7 +43,7 @@ class Files:
                 file_name = os.path.basename(file_url)
                 file_ext = os.path.splitext(file_name)[1][1:]  # Remove the leading dot
                 mime_type, _ = mimetypes.guess_type(file_url, strict=True)
-                media = file_url
+                media = file_url.replace(self.base_url, self.workspace_instance['BUSINESS_URL'])
             except requests.RequestException as e:
                 raise requests.RequestException(f"Error fetching remote file: {e}")
 
