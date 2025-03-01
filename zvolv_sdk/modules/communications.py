@@ -22,7 +22,7 @@ class Communications:
         :return:
         """
         try:
-            document = Documents(self.session, self.logger, self.base_url)
+            document = Documents(self.session, self.logger, self.base_url, self.workspace_instance)
 
             subject = document.get_custom_template_data(subject_template_id, variables)
             message = document.get_custom_template_html(message_template_id, variables)
@@ -75,7 +75,7 @@ class Communications:
         :return:
         """
         try:
-            document = Documents(self.session, self.logger, self.base_url)
+            document = Documents(self.session, self.logger, self.base_url, self.workspace_instance)
 
             subject = document.get_custom_template_data(subject_template_id, variables)
             message = document.get_custom_template_html(message_template_id, variables)
