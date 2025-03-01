@@ -4,11 +4,11 @@ import json
 
 
 class Workflows:
-    def __init__(self, session, logger, base_url):
+    def __init__(self, session, logger, base_url, workspace_instance):
         self.session = session
         self.logger = logger
         self.base_url = base_url
-        self.workspace_instance = None
+        self.workspace_instance = workspace_instance
 
     def get_project_tasks_metadata(self, wid: str, filters: dict = None):
         """

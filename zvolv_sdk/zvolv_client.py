@@ -51,8 +51,7 @@ class ZvolvClient:
         if not self._workspace_module or not self._workspace_module.workspace_instance:
             raise Exception('Workspace not initialized! Please use workspace.init() before calling auth methods')
         if not self._auth_module:
-            self._auth_module = Auth(self.session, self.logger, self.base_url,
-                                     self._workspace_module.workspace_instance)
+            self._auth_module = Auth(self.session, self.logger, self.base_url, self._workspace_module.workspace_instance)
         return self._auth_module
 
     @property
@@ -61,7 +60,7 @@ class ZvolvClient:
         self.validate()
 
         if not self._analytics_module:
-            self._analytics_module = Analytics(self.session, self.logger, self.base_url)
+            self._analytics_module = Analytics(self.session, self.logger, self.base_url, self._workspace_module.workspace_instance)
         return self._analytics_module
 
     @property
@@ -70,7 +69,7 @@ class ZvolvClient:
         self.validate()
 
         if not self._forms_module:
-            self._forms_module = Forms(self.session, self.logger, self.base_url)
+            self._forms_module = Forms(self.session, self.logger, self.base_url, self._workspace_module.workspace_instance)
         return self._forms_module
 
     @property
@@ -79,7 +78,7 @@ class ZvolvClient:
         self.validate()
 
         if not self._submissions_module:
-            self._submissions_module = Submissions(self.session, self.logger, self.base_url)
+            self._submissions_module = Submissions(self.session, self.logger, self.base_url, self._workspace_module.workspace_instance)
         return self._submissions_module
 
     @property
@@ -88,7 +87,7 @@ class ZvolvClient:
         self.validate()
 
         if not self._tasks_module:
-            self._tasks_module = Tasks(self.session, self.logger, self.base_url)
+            self._tasks_module = Tasks(self.session, self.logger, self.base_url, self._workspace_module.workspace_instance)
         return self._tasks_module
 
     @property
@@ -97,7 +96,7 @@ class ZvolvClient:
         self.validate()
 
         if not self._communications_module:
-            self._communications_module = Communications(self.session, self.logger, self.base_url)
+            self._communications_module = Communications(self.session, self.logger, self.base_url, self._workspace_module.workspace_instance)
         return self._communications_module
 
     @property
@@ -106,7 +105,7 @@ class ZvolvClient:
         self.validate()
 
         if not self._documents_module:
-            self._documents_module = Documents(self.session, self.logger, self.base_url)
+            self._documents_module = Documents(self.session, self.logger, self.base_url, self._workspace_module.workspace_instance)
         return self._documents_module
 
     @property
@@ -115,7 +114,7 @@ class ZvolvClient:
         self.validate()
 
         if not self._roles_module:
-            self._roles_module = Roles(self.session, self.logger, self.base_url)
+            self._roles_module = Roles(self.session, self.logger, self.base_url, self._workspace_module.workspace_instance)
         return self._roles_module
 
     @property
@@ -124,7 +123,7 @@ class ZvolvClient:
         self.validate()
 
         if not self._users_module:
-            self._users_module = Users(self.session, self.logger, self.base_url)
+            self._users_module = Users(self.session, self.logger, self.base_url, self._workspace_module.workspace_instance)
         return self._users_module
 
     @property
@@ -133,8 +132,7 @@ class ZvolvClient:
         self.validate()
 
         if not self._usergroups_module:
-            self._usergroups_module = UserGroups(self.session, self.logger, self.base_url,
-                                                 self._workspace_module.workspace_instance)
+            self._usergroups_module = UserGroups(self.session, self.logger, self.base_url, self._workspace_module.workspace_instance)
         return self._usergroups_module
 
     @property
@@ -143,7 +141,7 @@ class ZvolvClient:
         self.validate()
 
         if not self._workflows_module:
-            self._workflows_module = Workflows(self.session, self.logger, self.base_url)
+            self._workflows_module = Workflows(self.session, self.logger, self.base_url, self._workspace_module.workspace_instance)
         return self._workflows_module
 
     @property
@@ -152,8 +150,7 @@ class ZvolvClient:
         self.validate()
 
         if not self._files_module:
-            self._files_module = Files(self.session, self.logger, self.base_url,
-                                       self._workspace_module.workspace_instance)
+            self._files_module = Files(self.session, self.logger, self.base_url, self._workspace_module.workspace_instance)
         return self._files_module
 
     # Validate if workspace and user are initialized

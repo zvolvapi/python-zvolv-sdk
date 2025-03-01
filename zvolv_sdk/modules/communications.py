@@ -4,11 +4,11 @@ from typing import Union
 
 
 class Communications:
-    def __init__(self, session, logger, base_url):
+    def __init__(self, session, logger, base_url, workspace_instance):
         self.session = session
         self.logger = logger
         self.base_url = base_url
-        self.workspace_instance = None
+        self.workspace_instance = workspace_instance
 
     def send_mail_to_roles(self, roles: list, subject_template_id: Union[int, str], message_template_id: Union[int, str], variables: dict, communication_type: str = "MAIL"):
         """

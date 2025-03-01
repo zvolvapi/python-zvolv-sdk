@@ -36,7 +36,7 @@ class Files:
             media = absolute_file_path
         elif file_url:
             try:
-                response = requests.get(file_url)
+                response = requests.get(file_url.replace(self.workspace_instance['BUSINESS_URL'], self.base_url))
                 response.raise_for_status()
                 file_content = response.content
                 file_size = len(file_content)

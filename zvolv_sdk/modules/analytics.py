@@ -3,10 +3,11 @@ from elasticsearch_dsl import Search as ESearch
 
 
 class Analytics:
-    def __init__(self, session, logger, base_url):
+    def __init__(self, session, logger, base_url, workspace_instance):
         self.session = session
         self.logger = logger
         self.base_url = base_url
+        self.workspace_instance = workspace_instance
 
     def search(self, form_id: str, search_obj: ESearch):
         """
