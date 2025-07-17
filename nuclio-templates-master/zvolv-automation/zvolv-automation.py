@@ -13,7 +13,7 @@ from zvolv_sdk import ZvolvClient
 
 def handler(context, event):
     context.logger.info('Initializing Zvolv Client')
-    client = ZvolvClient(os.environ['HOST'])
+    client = ZvolvClient(os.environ['HOST'], os.environ['VERIFY_SSL'].lower() in ['true', '1', 'yes'])
     
     # Initialize workspace
     workspace = client.workspace.init(os.environ['WORKSPACE'])
@@ -22,8 +22,6 @@ def handler(context, event):
     userinfo = client.auth.login(os.environ['USERNAME'], os.environ['PASSWORD'])
 
     # Start your automation from here
-    
-
      
     # Return response
     return {}

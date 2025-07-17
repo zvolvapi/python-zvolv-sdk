@@ -8,3 +8,4 @@ sphinx-mdinclude
 pydantic
 elasticsearch-dsl
 python-dotenv
+redis
