@@ -1,2 +1,2 @@
-"""Check the latest version at https://pypi.org/project/zvolv-sdk/"""
-__version__ = "0.0.52"
+"""Check the latest version at https://pypi.org/project/zvolv-sdk-corp/"""
+__version__ = "0.0.53"

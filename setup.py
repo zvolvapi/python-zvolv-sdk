@@ -14,7 +14,7 @@ with open(os.path.join(here, "README.md"), encoding="utf-8") as readme:
 
 
 setup(
-    name='zvolv_sdk',
+    name='zvolv-sdk-corp',
     version=__version__,
     packages=find_packages(),
     license='MIT',
