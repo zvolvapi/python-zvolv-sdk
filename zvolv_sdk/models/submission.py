@@ -1,4 +1,4 @@
-from typing import List, Optional, Union
+from typing import Any, Dict, List, Optional, Union
 from pydantic import BaseModel
 
 
@@ -37,3 +37,24 @@ class Submission(BaseModel):
     generatedAt: Optional[str] = None
     configurations: Optional[dict] = {}
     elements: List[Element] = []
+
+
+class LegacyElement(BaseModel):
+    FormMetaID: int
+    ElementType: Optional[str] = None
+    FieldLabel: Optional[str] = None
+    Value: Optional[Any] = None
+    DefaultValue: Optional[Any] = None
+    MetaData: Optional[Dict[str, Any]] = None
+ 
+class LegacySubmission(BaseModel):
+    ZviceID: str
+    FormID: int
+    FormSubmissionID: Optional[int] = None
+    Flags: Optional[int] = 3
+    MetaData: Optional[Any] = None 
+    OverrideMetaData: Optional[bool] = False
+    RunPySync: Optional[bool] = False
+    submitDateFromApp: Optional[str] = None
+    saveOffline: Optional[bool] = None
+    Elements: List[LegacyElement]
