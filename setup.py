@@ -30,7 +30,8 @@ setup(
     install_requires=[
         'requests>=2.23.0',
         'pydantic>=2.7.3',
-        'elasticsearch_dsl>=8.13.1'
+        'elasticsearch_dsl>=8.13.1',
+        'redis'
     ],
     classifiers=[
         'Development Status :: 3 - Alpha',
