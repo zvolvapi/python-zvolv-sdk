@@ -110,3 +110,34 @@ class Forms:
         except Exception as e:
             self.logger.error(e)
             raise e
+
+    def get_legacy_form(self, id):
+        """
+        Get form details using id
+
+        :param id: The ID/formSubmissionID of the form to retrieve.
+        :return:
+        """
+        try:
+            url = f"{self.base_url}/rest/v17/lite/forms/{id}"
+            response = self.session.get(url)
+            response.raise_for_status()  # Raise an exception for HTTP errors
+
+            resp = response.json()
+            if resp.get('error') is False:
+                self.logger.info(f"Successfully fetched form for {id}")
+            else:
+                raise ValueError(resp.get('message'))
+            return resp['data']['elements'][0]
+        except requests.exceptions.RequestException as http_err:
+            error_response = response.json()
+            status_code = error_response.get('statusCode', response.status_code)
+            error_message = error_response.get('message', str(http_err))
+
+            error_message = f"{status_code} Error: {error_message}"
+            self.logger.error(f"An error occurred: {error_message}")
+            raise requests.exceptions.HTTPError(error_message)
+        except Exception as e:
+            self.logger.error(e)
+            raise e
+
