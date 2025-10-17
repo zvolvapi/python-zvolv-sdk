@@ -44,8 +44,7 @@ class Auth:
                 self.logger.error(f"Error fetching token for key {key}, attempt {attempt + 1}/{self.MAX_RETRIES}. Error: {str(e)}")
                 if attempt < self.MAX_RETRIES - 1:
                     time.sleep(self.RETRY_DELAY_SECONDS)
-
-        raise Exception(f'Login Token Retrieval Failed after {self.MAX_RETRIES} attempts')
+        self.logger.info(f'Login Token Retrieval Failed after {self.MAX_RETRIES} attempts')
 
     def login(self, email: str, password: str):
         """Authenticate a user and store their auth token."""
