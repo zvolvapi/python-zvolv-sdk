@@ -1,3 +1,4 @@
+import json
 import os
 import requests
 import redis
@@ -46,12 +47,65 @@ class Auth:
                     time.sleep(self.RETRY_DELAY_SECONDS)
         self.logger.info(f'Login Token Retrieval Failed after {self.MAX_RETRIES} attempts')
 
+    def set_super_admin_info(self, key, value):
+        try:
+            redis_host = os.environ.get('REDIS_HOST', 'localhost')
+            redis_port = int(os.environ.get('REDIS_PORT', 6379))
+
+            # Create a Redis client
+            redis_instance = redis.Redis(host=redis_host, port=redis_port, db=0)
+
+            # Store the response as JSON string
+            redis_instance.set(key, json.dumps(value))
+
+            self.logger.info(f"SuperAdminInfo successfully cached for key: {key}")
+            return True
+
+        except redis.RedisError as e:
+            self.logger.error(f"Redis error while setting SuperAdminInfo for key {key}: {e}")
+            return False
+
+        except Exception as e:
+            self.logger.error(f"Unexpected error while setting SuperAdminInfo for key {key}: {e}")
+            return False
+
+    def get_super_admin_info(self, key):
+        try:
+            redis_host = os.environ.get('REDIS_HOST', 'localhost')
+            redis_port = int(os.environ.get('REDIS_PORT', 6379))
+
+            # Create a Redis client
+            redis_instance = redis.Redis(host=redis_host, port=redis_port, db=0)
+
+            # Fetch data from Redis
+            userinfo = redis_instance.get(key)
+
+            if userinfo:
+                try:
+                    # Try decoding JSON if it was stored as JSON string
+                    return json.loads(userinfo)
+                except json.JSONDecodeError:
+                    # If it's plain text or non-JSON, return raw value (decoded bytes)
+                    return userinfo.decode('utf-8')
+
+            self.logger.warning(f"No SuperAdminInfo found in Redis for key: {key}")
+            return None
+
+        except redis.RedisError as e:
+            self.logger.error(f"Redis error while getting SuperAdminInfo for key {key}: {e}")
+            return None
+
+        except Exception as e:
+            self.logger.error(f"Unexpected error while getting SuperAdminInfo for key {key}: {e}")
+            return None
+
     def login(self, email: str, password: str):
         """Authenticate a user and store their auth token."""
         response = None
         try: 
             # Step 1: Check if the login token is already cached in Redis
             cached_token = self.get_token_with_retry("{}-SuperAdminToken".format(self.workspace_instance['BUSINESS_DOMAIN']))
+            self.user_instance = self.get_super_admin_info("{}-SuperAdminInfo".format(self.workspace_instance['BUSINESS_DOMAIN']))
             if cached_token:
                 self.logger.info(f"Using cached token for key {cached_token}")
             else:
@@ -84,6 +138,9 @@ class Auth:
                 if resp.get('error') is False:
                     cached_token = resp['loginToken']
                     self.user_instance = resp
+                    key = f"{self.workspace_instance['BUSINESS_DOMAIN']}-SuperAdminInfo"
+                    self.set_super_admin_info(key, resp)
+                    
                 else:
                     raise ValueError(resp.get('message'))
                 
