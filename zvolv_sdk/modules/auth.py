@@ -34,6 +34,8 @@ class Auth:
                 # Attempt to get the token from Redis
                 token_data = redis_instance.get(key)
                 if token_data:
+                    if isinstance(token_data, bytes):
+                        token_data = token_data.decode('utf-8')
                     return token_data
 
                 self.logger.warning(f"Token not found in Redis for key {key}, attempt {attempt + 1}/{self.MAX_RETRIES}")
