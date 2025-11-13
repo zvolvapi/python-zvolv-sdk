@@ -108,8 +108,8 @@ class LegacyTaskRequestBody(BaseModel):
     RevertOnSubmission: Optional[str] = None
     CompleteOnFSManualOrBot: Optional[str] = None
     IgnoreDependency: Optional[str] = None
-    PreviousStages: Optional[List[Any]] = None
-    NextStages: Optional[List[Any]] = None
+    PreviousStages: Optional[List[str]] = None
+    NextStages: Optional[List[str]] = None
     NextConfig: Optional[Dict[str, Any]] = None
     NextTasks: Optional[Dict[str, Any]] = None
     ProgressPercent: Optional[int] = None
