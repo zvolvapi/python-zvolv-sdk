@@ -49,7 +49,7 @@ class Workspace:
             self.workspace_instance['BUSINESS_URL'] = business_url
 
         except requests.exceptions.RequestException as http_err:
-            error_response = response.json()
+            error_response = http_err.response.json() if http_err.response else {}
             status_code = error_response.get('statusCode', response.status_code)
             error_message = error_response.get('message', str(http_err))
             error_message = f"{status_code} Error: {error_message}"
