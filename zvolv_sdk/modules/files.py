@@ -96,3 +96,44 @@ class Files:
         except Exception as e:
             self.logger.error(f"Unexpected error during file upload: {str(e)}")
             raise
+
+    def new_upload_file(self, filename: str, filepath: str):
+        """
+        Upload a file to the server.
+
+        :param filename: The name of the file to be uploaded.
+        :param filepath: The local path of the file to be uploaded.
+        :return: The server's response as a dictionary.
+        """
+        if not os.path.exists(filepath):
+            raise FileNotFoundError(f"The file {filepath} does not exist.")
+        try:
+            with open(filepath, 'rb') as file:
+                files = {'file': (filename, file)}
+                url = f"{self.base_url}/api/v1/media/upload"
+
+                if 'content-type' in self.session.headers or "Content-type" in self.session.headers:
+                    del self.session.headers["Content-type"]
+                response = self.session.post(url, files=files)
+                response.raise_for_status()  # Raise an exception for HTTP errors
+
+                resp = response.json()
+                if not resp.get('error', True):
+                    self.logger.info(f"Successfully uploaded file: {filename}")
+                else:
+                    raise ValueError(resp.get('message', 'Unknown error occurred during file upload'))
+                return resp["data"]
+
+        except requests.exceptions.RequestException as http_err:
+            error_response = response.json() if response.headers.get('content-type', '').startswith(
+                'application/json') else {}
+            status_code = error_response.get('statusCode', response.status_code)
+            error_message = error_response.get('message', str(http_err))
+
+            error_message = f"{status_code} Error: {error_message}"
+            self.logger.error(f"An error occurred during file upload: {error_message}")
+            raise requests.exceptions.RequestException(error_message)
+
+        except Exception as e:
+            self.logger.error(f"Unexpected error during file upload: {str(e)}")
+            raise
