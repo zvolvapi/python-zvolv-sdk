@@ -1,5 +1,5 @@
 from pydantic import BaseModel
-from typing import List, Optional, Union
+from typing import List, Optional, Union, Any
 
 
 class Element(BaseModel):
@@ -15,8 +15,8 @@ class Element(BaseModel):
     updateIfUnique: Optional[bool] = False
     properties: Optional[dict] = {}
     attributes: Optional[dict] = {}
-    dependencies: Optional[List] = []
-    validations: Optional[List] = []
+    dependencies: Optional[List[Any]] = []
+    validations: Optional[List[Any]] = []
     dataType: Optional[str] = None
     rbacConf: Optional[dict] = {}
     abacConf: Optional[dict] = {}
@@ -38,8 +38,8 @@ class Form(BaseModel):
     enableRetrofit: Optional[bool] = True
     enableReSync: Optional[bool] = True
     abacOperator: Optional[str] = None
-    tags: Optional[List] = []
-    canReadRoles: Optional[List] = []
-    canUpdateRoles: Optional[List] = []
+    tags: Optional[List[str]] = []
+    canReadRoles: Optional[List[Any]] = []
+    canUpdateRoles: Optional[List[Any]] = []
     configurations: Optional[dict] = {}
     elements: List[Element] = []
